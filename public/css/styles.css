@@ -1,0 +1,274 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* General Styles */
+body {
+    font-family: "Montserrat", sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #f0f0f0;
+    background-color: rgba(0, 0, 51, 0.8);
+    background-attachment: fixed;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+h1, h2, h3, h4 {
+    margin: 0 0 10px 0;
+}
+
+p {
+    margin: 0 0 20px 0;
+}
+
+/* Header */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 51, 0.8);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+}
+
+/* Hero Section */
+.hero {
+    background-image: url("../images/header/Header.png");
+    background-size: cover;
+    background-position: center center;
+    padding: 300px 0;
+    text-align: center;
+}
+
+.hero .container {
+    background-color: rgba(0, 0, 51, 0.7); /* Slightly more transparent */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional: Add shadow for better separation */
+}
+
+.hero .btn-primary {
+    text-decoration: none;
+    color: rgba(0, 0, 51, 0.8);
+    background: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in, top 0.2s ease-in;
+}
+
+/* Benefits */
+.benefits {
+    background: rgba(0, 0, 51, 0.8);
+    text-align: center;
+    padding: 50px 0;
+}
+
+.benefit {
+    display: inline-block;
+    width: 30%;
+    margin: 20px;
+    vertical-align: top;
+}
+
+.benefit .icon {
+    font-size: 50px;
+}
+
+.benefit h3, .benefit p {
+    color: #fff;
+}
+
+/* Featured Courses */
+.featured-courses {
+    padding: 50px 0;
+    text-align: center;
+}
+
+.course {
+    display: inline-block;
+    width: 30%;
+    margin: 20px;
+    vertical-align: top;
+}
+
+.course img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.btn-secondary {
+    text-decoration: none;
+    color: rgba(0, 0, 51, 0.8);
+    background: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in, top 0.2s ease-in;
+}
+
+/* How It Works */
+.how-it-works {
+    background: rgba(0, 0, 51, 0.8);
+    text-align: center;
+    padding: 50px 0;
+}
+
+.step {
+    display: inline-block;
+    width: 23%;
+    margin: 20px;
+    vertical-align: top;
+}
+
+.step .icon {
+    font-size: 50px;
+}
+
+.step h3, .step p {
+    color: #fff;
+}
+
+/* Testimonials */
+.testimonials {
+    padding: 50px 0;
+    text-align: center;
+}
+
+.testimonial {
+    display: inline-block;
+    width: 45%;
+    margin: 20px;
+    padding: 20px;
+    background: #333;
+    border-radius: 5px;
+    color: #fff;
+}
+
+/* Our Instructors */
+.our-instructors {
+    background: rgba(0, 0, 51, 0.8);
+    text-align: center;
+    padding: 50px 0;
+}
+
+.instructor {
+    display: inline-block;
+    width: 45%;
+    margin: 20px;
+    vertical-align: top;
+}
+
+.instructor img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.instructor h3, .instructor p {
+    color: #fff;
+}
+
+/* Blog */
+.blog {
+    padding: 50px 0;
+    text-align: center;
+}
+
+.blog-post {
+    display: inline-block;
+    width: 45%;
+    margin: 20px;
+    vertical-align: top;
+}
+
+.blog-post img {
+    width: 300px;
+    height: 300px;
+    border-radius: 10px;
+}
+
+.blog-post h3, .blog-post p {
+    color: #fff;
+}
+
+/* Footer */
+
+.contacts {
+    padding: 90px 0;
+    text-align: center;
+    background-color: rgba(0, 0, 51, 0.8);;
+}
+
+.contacts-title {
+    margin-bottom: 40px;
+}
+
+.contacts-content {
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+.contacts-button {
+    margin-bottom: 80px;
+}
+
+.btn {
+    background-color: #ffffff;
+    padding: 7px 22px;
+    display: inline-block;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 18px;
+    color: rgba(0, 0, 51, 0.8);
+    transition: background-color 0.2s ease-in, top 0.2s ease-in;
+}
+
+.btn:hover, .btn:focus, .btn-secondary:hover, .btn-secondary:focus, .btn-primary:hover, .btn-primary:focus {
+    background-color: #a7acaf;
+}
+
+.btn:active, .btn-secondary:active, .btn-primary:active {
+    position: relative;
+    top: 1px;
+    background-color: black;
+}
+
+.contact-social {
+    display: flex;
+    justify-content: center;
+    column-gap: 60px;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.contacts-footer {
+    color: #ffffff;
+}
