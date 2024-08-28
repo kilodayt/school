@@ -2,22 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request; // Исправленный импорт
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
     use AuthenticatesUsers;
 
     /**
@@ -36,5 +26,26 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
+    }
+
+    /**
+     * Переопределяем метод для редиректа после авторизации.
+     *
+     * @param Request $request
+     * @param $user
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        // Проверяем, есть ли intended URL в сессии или в localStorage
+        $intendedUrl = session('url.intended') ?: $request->session()->get('intended_url');
+
+        // Если intended URL найден, перенаправляем пользователя туда
+        if ($intendedUrl) {
+            return redirect()->to($intendedUrl);
+        }
+
+        // Иначе перенаправляем на главную страницу
+        return redirect($this->redirectTo);
     }
 }

@@ -210,9 +210,11 @@ nav ul li a {
 }
 
 .blog-post img {
-    width: 300px;
-    height: 300px;
-    border-radius: 10px;
+    display: block; /* Обеспечиваем, что изображение занимает блок */
+    margin: 0 auto; /* Центрируем по горизонтали */
+    max-width: 100%; /* Ограничиваем максимальную ширину изображения */
+    height: auto; /* Сохраняем пропорции изображения */
+    border-radius: 10px; /* Если нужен скругленный угол */
 }
 
 .blog-post h3, .blog-post p {
@@ -220,6 +222,17 @@ nav ul li a {
 }
 
 /* Footer */
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+p {
+    margin: 0 0 20px 0;
+}
 
 .contacts {
     padding: 90px 0;
@@ -238,6 +251,19 @@ nav ul li a {
 
 .contacts-button {
     margin-bottom: 80px;
+}
+
+
+.contact-social {
+    display: flex;
+    justify-content: center;
+    column-gap: 60px;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.contacts-footer {
+    color: #ffffff;
 }
 
 .btn {
@@ -261,14 +287,4 @@ nav ul li a {
     background-color: black;
 }
 
-.contact-social {
-    display: flex;
-    justify-content: center;
-    column-gap: 60px;
-    align-items: center;
-    margin-bottom: 40px;
-}
 
-.contacts-footer {
-    color: #ffffff;
-}

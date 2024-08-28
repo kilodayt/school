@@ -6,27 +6,35 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LessonController;
 
 
+// Главная
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/login', function () {
-    return view('login');
+// Авторизация
+Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
+Route::post('/login', 'Auth\LoginController@login');
+Route::group(['middleware' => 'store.previous.url'], function () {
+    Auth::routes(); // Все стандартные маршруты аутентификации
 });
 
-
+// О нас
 Route::get('/about', function () {
     return view('about');
 });
 
+// Контакты
 Route::get('/contacts', function () {
     return view('contacts');
 });
 
+// Курсы
 Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
 Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
-Route::get('/courses/{id}/learn', [CourseController::class, 'learn'])->name('courses.learn');
-Route::get('/course/{course_id}/lessons', [LessonController::class, 'index'])->name('lessons.index');
-Route::get('/course/{course_id}/lessons/{id}', [LessonController::class, 'show'])->name('lessons.show');
+
+// Уроки
+Route::get('/course/{course_id}/lessons', [LessonController::class, 'index'])->name('lessons.index')->middleware('auth');
+Route::get('/course/{course_id}/lessons/{id}', [LessonController::class, 'show'])->name('lessons.show')->middleware('auth');
+
 Auth::routes();
 

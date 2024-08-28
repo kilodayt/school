@@ -1,5 +1,6 @@
 /* Mobile Styles */
 @media (max-width: 768px) {
+
     .container {
         width: 100%;
         padding: 10px;
@@ -13,6 +14,7 @@
     nav {
         display: block;
         margin-left: 0;
+        margin-top: 0;
         text-align: center;
         width: 100%;
     }
@@ -21,11 +23,18 @@
         flex-direction: column;
         align-items: center;
         padding: 0;
+        gap: 0;
     }
 
     nav ul li {
         display: block;
         margin: 10px 0;
+    }
+
+    nav ul li a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: 500;
     }
 
     .hero {
@@ -38,8 +47,19 @@
         margin: 20px auto;
     }
 
+    .blog-post .img {
+        display: flex;
+        justify-content: center; /* Центрируем содержимое по горизонтали */
+    }
+
     .testimonials {
         padding: 20px 0;
+    }
+
+    .contact-social {
+        flex-direction: row;
+        row-gap: 20px;
+        display: none;
     }
 
     .btn-primary, .btn-secondary {
@@ -52,11 +72,6 @@
         display: block;
         margin: 10px auto;
         text-align: center;
-    }
-
-    .contact-social {
-        flex-direction: column;
-        row-gap: 20px;
     }
 
     /* Adjusting specific sections for better mobile view */

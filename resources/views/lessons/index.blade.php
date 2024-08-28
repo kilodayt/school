@@ -1,23 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @include('includes.head')
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Уроки</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
+    @include('includes.head')
     <style>
 
         /* General Styles */
-        body {
-            font-family: "Montserrat", sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #f0f0f0;
-            background-color: rgba(0, 0, 51, 0.8);
-            background-attachment: fixed;
-        }
-
         h3 {
             color: #1a202c;
         }
@@ -27,7 +19,7 @@
             margin-top: 50px;
             margin-bottom: 50px;
             padding: 20px;
-            background-color: rgba(0, 0, 51, 0.7);
+
         }
 
         .lessons-list {
@@ -63,12 +55,8 @@
 
         .lesson-item a:hover {
             color: #007bff;
-        }
-
-        .active {
             font-weight: bold;
         }
-
     </style>
 
 </head>

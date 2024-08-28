@@ -6,8 +6,8 @@
 
     <title>{{ $course->description }}</title>
     @include('includes.head')
-    <!-- Подключение Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('css/course.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/toast-message.css') }}">
 </head>
 <body>
 
@@ -53,9 +53,27 @@
             <!-- Если пользователь авторизован, ссылка ведет к урокам -->
             <a href="{{ route('lessons.index', ['course_id' => $course->id]) }}" class="btn-secondary">Изучать</a>
         @else
-            <!-- Если пользователь не авторизован, ссылка ведет к странице авторизации -->
-            <a href="{{ route('login') }}" class="btn-secondary">Изучать</a>
+            <!-- Если пользователь не авторизован, показываем всплывающее сообщение -->
+            <a href="javascript:void(0);" class="btn-secondary" onclick="showAuthAlert()">Изучать</a>
         @endauth
+
+        <!-- Всплывающее сообщение -->
+        <div id="authToast" class="toast-message">
+            <p>Пожалуйста, авторизуйтесь, чтобы продолжить изучение курса.</p>
+        </div>
+
+        <!-- JavaScript -->
+        <script>
+            function showAuthAlert() {
+                var toastEl = document.getElementById('authToast');
+                toastEl.classList.add('show'); // Показываем Toast
+
+                // Автоматическое скрытие через 3 секунды
+                setTimeout(function() {
+                    toastEl.classList.remove('show');
+                }, 3000);
+            }
+        </script>
 
     </div>
 </section>

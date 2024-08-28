@@ -14,7 +14,10 @@
         <div class="user-auth">
             @guest
                 @if (Route::has('login'))
-                    <a class="btn btn-primary" href="{{ route('login') }}">Авторизоваться</a>
+                    <!-- Сохраняем текущий URL и передаем его в качестве intended параметра -->
+                    <a class="btn btn-primary" href="{{ route('login', ['intended' => url()->full()]) }}">
+                        Авторизоваться
+                    </a>
                 @endif
             @else
                 <!-- Dropdown -->
@@ -43,3 +46,16 @@
 <!-- Подключение Bootstrap JS и jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let loginButton = document.querySelector('.btn-primary[href="{{ route('login') }}"]');
+        if (loginButton) {
+            loginButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                let intendedUrl = window.location.href;
+                localStorage.setItem('intended_url', intendedUrl);
+                window.location.href = "{{ route('login') }}";
+            });
+        }
+    });
+</script>

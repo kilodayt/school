@@ -21,7 +21,7 @@
                    name="email"
                    placeholder="Email"
                    required>
-            <i class='bx bx-user' ></i>
+            <i class='bx bx-user'></i>
         </div>
         <div class="input-box">
             <input type="password"
@@ -39,12 +39,17 @@
 </div>
 <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 <script>
-    document.getElementById('togglePassword').addEventListener('click', function (e) {
+    document.getElementById('togglePassword').addEventListener('click', function () {
         const passwordInput = document.getElementById('password');
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordInput.setAttribute('type', type);
         this.classList.toggle('bx-show');
     });
+
+    window.onload = function() {
+        // После успешного входа очищаем локальное хранилище
+        localStorage.removeItem('intended_url');
+    };
 </script>
 </body>
 </html>

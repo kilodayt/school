@@ -6,37 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $lesson->title }}</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
+
     <style>
+
         /* General Styles */
-        body {
-            font-family: "Montserrat", sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #f0f0f0;
-            background-color: rgba(0, 0, 51, 0.8);
-            background-attachment: fixed;
-        }
-
-        h3, h2 {
-            color: #1a202c;
-        }
-
-        .container {
+        .lessons-container {
             display: flex;
-            max-width: 1200px;
-            margin: 50px auto; /* Центрируем контейнер и добавляем отступы */
+            margin: 50px auto;
+            max-width: 1600px;
             padding: 20px;
-            background-color: rgba(0, 0, 51, 0.7); /* Slightly more transparent for better readability */
+            background-color: rgba(0, 0, 51, 0.7);
             border-radius: 10px;
+
         }
 
         .lessons-list {
-            width: 25%;
+            width: 30%;
             padding: 20px;
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             overflow-y: auto; /* Добавляем прокрутку, если содержимое списка превышает высоту */
+        }
+
+        .lessons-list h3{
+            color: #1a202c;
         }
 
         .lesson-item {
@@ -77,16 +71,28 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
+        .lesson-content h2 {
+            text-align: center;
+            color: #1a202c;
+        }
+
         .content-section {
             display: none;
         }
 
+        .content-section p, h3 {
+            color: #1a202c;
+        }
         .content-section.active {
             display: block;
         }
 
         .nav-links {
             margin-bottom: 20px;
+            display: flex; /* Включаем flexbox */
+            justify-content: center; /* Выровнять ссылки по центру */
+            flex-wrap: wrap; /* Добавляем перенос на новую строку, если не помещаются */
+            font-size: 20px;
         }
 
         .nav-links a {
@@ -94,6 +100,12 @@
             color: #007bff;
             font-weight: bold;
             margin-right: 15px;
+            display: inline-block;
+            text-align: center; /* Центрирование текста внутри ссылок */
+        }
+
+        .nav-links a:last-child {
+            margin-right: 0; /* Убираем последний отступ */
         }
 
         .nav-links a:hover {
@@ -101,11 +113,12 @@
         }
     </style>
 </head>
-<body>
 
+<body>
 @include('includes.header')
 
-<div class="container">
+
+<div class="lessons-container">
     <!-- Список уроков -->
     <div class="lessons-list">
         <h3>Уроки</h3>
@@ -134,25 +147,24 @@
         <!-- Секции контента -->
         <div id="theory1" class="content-section">
             <h3>Теория 1</h3>
-            <p>{{ $lessonDetails->theory_1 }}</p>
+            <p>{!! $theory1Text !!}</p>
         </div>
         <div id="theory2" class="content-section">
             <h3>Теория 2</h3>
-            <p>{{ $lessonDetails->theory_2 }}</p>
+            <p>{!! $theory2Text !!}</p>
         </div>
         <div id="theory3" class="content-section">
             <h3>Теория 3</h3>
-            <p>{{ $lessonDetails->theory_3 }}</p>
+            <p>{!! $theory3Text !!}</p>
         </div>
         <div id="exercise" class="content-section">
             <h3>Упражнение</h3>
-            <p>{{ $lessonDetails->exessize }}</p>
+            <p>{!! $exessizeText !!}</p>
         </div>
     </div>
 </div>
 
-@include('includes.head')
-@include('includes.footer')
+
 
 <script>
     // JavaScript для управления видимостью секций контента
@@ -177,6 +189,6 @@
         });
     });
 </script>
-
+@include('includes.footer')
 </body>
 </html>

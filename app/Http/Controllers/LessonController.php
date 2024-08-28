@@ -61,13 +61,24 @@ class LessonController extends Controller
         }
 
         // Получаем детали урока
-        $lessonDetails = LessonDetail::where('lesson_id', $lesson_id)->first();
+        $lessonDetails = LessonDetail::where('lesson_id', $lesson_id)->where('course_id', $course_id)->first();
 
+        // Функция для извлечения первого предложения
+        function formatText($text) {
+            // Заменяем двойные переносы строк на закрывающий и открывающий тег <p> для разделения на абзацы
+            $text = nl2br(e($text)); // Преобразование символов новой строки в <br> и экранирование HTML
+            return $text;
+        }
+
+        $theory1Text = formatText($lessonDetails->theory_1);
+        $theory2Text = formatText($lessonDetails->theory_2);
+        $theory3Text = formatText($lessonDetails->theory_3);
+        $exessizeText = formatText($lessonDetails->exessize);
         // Получаем все уроки курса
         $lessons = $course->lessons;
 
         // Передаем данные в представление
-        return view('lessons.show', compact('course', 'lesson', 'lessonDetails', 'lessons'));
+        return view('lessons.show', compact('course', 'lesson', 'lessonDetails', 'lessons', 'theory1Text', 'theory2Text', 'theory3Text', 'exessizeText'));
     }
 
     // Показать форму для редактирования урока
