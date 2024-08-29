@@ -1,122 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     @include('includes.head')
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $lesson->title }}</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
+    <link rel="stylesheet" href="{{ asset('css/lessons/lessons-show.css') }}">
 
-    <style>
-
-        /* General Styles */
-        .lessons-container {
-            display: flex;
-            margin: 50px auto;
-            max-width: 1600px;
-            padding: 20px;
-            background-color: rgba(0, 0, 51, 0.7);
-            border-radius: 10px;
-
-        }
-
-        .lessons-list {
-            width: 30%;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            overflow-y: auto; /* Добавляем прокрутку, если содержимое списка превышает высоту */
-        }
-
-        .lessons-list h3{
-            color: #1a202c;
-        }
-
-        .lesson-item {
-            display: block;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s, box-shadow 0.3s;
-        }
-
-        .lesson-item:hover {
-            background-color: #e0e0e0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        .lesson-item a {
-            text-decoration: none;
-            color: #333;
-            display: block;
-        }
-
-        .lesson-item a:hover {
-            color: #007bff;
-        }
-
-        .active {
-            font-weight: bold;
-        }
-
-        .lesson-content {
-            width: 75%;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .lesson-content h2 {
-            text-align: center;
-            color: #1a202c;
-        }
-
-        .content-section {
-            display: none;
-        }
-
-        .content-section p, h3 {
-            color: #1a202c;
-        }
-        .content-section.active {
-            display: block;
-        }
-
-        .nav-links {
-            margin-bottom: 20px;
-            display: flex; /* Включаем flexbox */
-            justify-content: center; /* Выровнять ссылки по центру */
-            flex-wrap: wrap; /* Добавляем перенос на новую строку, если не помещаются */
-            font-size: 20px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #007bff;
-            font-weight: bold;
-            margin-right: 15px;
-            display: inline-block;
-            text-align: center; /* Центрирование текста внутри ссылок */
-        }
-
-        .nav-links a:last-child {
-            margin-right: 0; /* Убираем последний отступ */
-        }
-
-        .nav-links a:hover {
-            text-decoration: underline;
-        }
-    </style>
 </head>
 
 <body>
-@include('includes.header')
 
+@include('includes.header')
 
 <div class="lessons-container">
     <!-- Список уроков -->
@@ -164,7 +59,7 @@
     </div>
 </div>
 
-
+@include('includes.footer')
 
 <script>
     // JavaScript для управления видимостью секций контента
@@ -189,6 +84,7 @@
         });
     });
 </script>
-@include('includes.footer')
+
 </body>
+
 </html>

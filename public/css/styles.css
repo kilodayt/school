@@ -11,7 +11,7 @@ body {
 }
 
 .container {
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
     padding: 20px;
     border-radius: 10px;
@@ -92,7 +92,7 @@ nav ul li a {
 
 .benefit {
     display: inline-block;
-    width: 30%;
+    width: 85%;
     margin: 20px;
     vertical-align: top;
 }
@@ -133,26 +133,55 @@ nav ul li a {
     transition: background-color 0.2s ease-in, top 0.2s ease-in;
 }
 
-/* How It Works */
+/* How It Works Section */
 .how-it-works {
     background: rgba(0, 0, 51, 0.8);
-    text-align: center;
     padding: 50px 0;
+    text-align: center;
+}
+
+.how-it-works h2 {
+    color: #fff;
+    margin-bottom: 50px;
+    font-size: 32px;
+    font-weight: bold;
 }
 
 .step {
     display: inline-block;
-    width: 23%;
+    width: 20%; /* 4 блока на одной строке */
+    max-width: 300px;
     margin: 20px;
     vertical-align: top;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.step:hover {
+    transform: scale(1.05); /* Легкий зум при наведении */
 }
 
 .step .icon {
     font-size: 50px;
+    margin-bottom: 15px;
+    color: #ffcc00; /* Цвет для иконок */
 }
 
-.step h3, .step p {
+.step h3 {
+    font-size: 24px;
     color: #fff;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.step p {
+    color: #ccc;
+    font-size: 16px;
+    line-height: 1.5;
 }
 
 /* Testimonials */
@@ -222,13 +251,6 @@ nav ul li a {
 }
 
 /* Footer */
-
-.container {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-    border-radius: 10px;
-}
 
 p {
     margin: 0 0 20px 0;

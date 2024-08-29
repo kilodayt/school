@@ -7,6 +7,7 @@
 </head>
 
 <title>Наши курсы</title>
+
 <body>
 
 @include('includes.header')
@@ -28,8 +29,11 @@
 </section>
 
 @include('includes.footer')
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" integrity="sha512-A7AYk1fGKX6S2SsHywmPkrnzTZHrgiVT7GcQkLGDe2ev0aWb8zejytzS8wjo7PGEXKqJOrjQ4oORtnimIRZBtw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script src="{{ asset('js/Animation.js') }}"></script>
+
 </body>
 </html>
 

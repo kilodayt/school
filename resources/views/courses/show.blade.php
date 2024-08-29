@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Добавьте это в <head> вашего шаблона -->
-
-
     <title>{{ $course->description }}</title>
     @include('includes.head')
-    <link rel="stylesheet" href="{{ asset('css/course.css') }}">
     <link rel="stylesheet" href="{{ asset('css/toast-message.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/course.css') }}">
 </head>
 <body>
 
@@ -82,6 +79,8 @@
 
 <!-- Подключение Bootstrap JS и зависимостей -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>
