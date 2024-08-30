@@ -2,6 +2,9 @@
 <header>
     <div class="header-container d-flex justify-content-between align-items-center p-3">
         <div class="logo">Proga</div>
+        <button class="menu-toggle menu-toggle-test" aria-label="Открыть меню">
+            <span class="menu-icon"></span>
+        </button>
         <nav>
             <ul class="nav">
                 <li class="nav-item"><a class="nav-link" href="/">Главная</a></li>
@@ -60,4 +63,36 @@
             });
         }
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var menuToggle = document.querySelector('.menu-toggle');
+        var nav = document.querySelector('.nav');
+
+        menuToggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            if (nav.style.display === 'block') {
+                nav.style.display = 'none';
+            } else {
+                nav.style.display = 'block';
+            }
+        });
+    });
+
+    let lastScrollTop = 0;
+    const header = document.querySelector('header');
+
+    window.addEventListener('scroll', function () {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (scrollTop > lastScrollTop) {
+            // Скроллим вниз, прячем шапку
+            header.style.top = '-155px'; // Прячем шапку за верх экрана
+        } else {
+            // Скроллим вверх, показываем шапку
+            header.style.top = '0';
+        }
+
+        lastScrollTop = scrollTop;
+    });
 </script>
+

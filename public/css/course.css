@@ -34,7 +34,6 @@ p {
 
 /* Карусель */
 .carousel-item {
-    padding: 20px;
     background: rgba(0, 0, 51, 0.8);
     border-radius: 10px;
     color: #fff;
@@ -46,7 +45,7 @@ p {
 
 .carousel-control-prev,
 .carousel-control-next {
-    width: 5%;
+    width: 50%;
 }
 
 .carousel-inner {
@@ -65,15 +64,15 @@ p {
 }
 
 .col-md-4 {
-    flex: 1;
+    flex: auto;
     max-width: max-content;
-    margin: 10px;
+    margin: 0;
 }
 
 /* Стили для отдельных уроков */
 .course-li {
     border-radius: 10px;
-    padding: 15px;
+    padding: 0;
     text-align: center;
 }
 

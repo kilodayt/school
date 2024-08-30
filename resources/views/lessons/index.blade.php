@@ -5,7 +5,7 @@
     @include('includes.head')
     <title>Уроки</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
-    <link rel="stylesheet" href="{{ asset('css/lessons/lessons-index.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/lessons/lessons-show.css') }}">
 </head>
 
 <body>
@@ -13,6 +13,7 @@
 @include('includes.header')
 
 <div class="lessons-container">
+    <!-- Список уроков -->
     <div class="lessons-list">
         <h3>Уроки</h3>
         @foreach($lessons as $lesson)

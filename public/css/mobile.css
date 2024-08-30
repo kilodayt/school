@@ -7,6 +7,17 @@
         display: inline-block;
     }
 
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        background-color: rgba(0, 0, 51, 0.9);
+        transition: top 0.3s ease-in-out;
+        padding: 10px 0;
+    }
+
     .header-container {
         flex-direction: column;
         align-items: center;
@@ -17,6 +28,46 @@
         margin-left: 0;
         text-align: center;
         width: 100%;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+    /* Кнопка для открытия меню */
+    .menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        cursor: pointer;
+        position: relative;
+        z-index: 1002;
+    }
+
+    .menu-icon {
+        display: block;
+        width: 30px;
+        height: 2px;
+        background: #fff;
+        position: relative;
+    }
+
+    .menu-icon::before,
+    .menu-icon::after {
+        content: '';
+        display: block;
+        width: 30px;
+        height: 2px;
+        background: #fff;
+        position: absolute;
+        left: 0;
+    }
+
+    .nav {
+        display: none; /* Скрываем меню по умолчанию */
+    }
+
+    .menu-toggle.active + .nav {
+        display: block;
     }
 
     nav ul {
@@ -32,6 +83,11 @@
 
     .hero {
         padding: 150px 0;
+        margin-top: 155px;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
     }
 
     .course, .step, .testimonial, .instructor, .blog-post {
@@ -139,5 +195,9 @@
 
     .hero .btn-primary {
         width: auto;
+    }
+
+    .course-li {
+
     }
 }

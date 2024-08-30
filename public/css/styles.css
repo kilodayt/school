@@ -58,6 +58,10 @@ nav ul li a {
     font-weight: 500;
 }
 
+.menu-toggle {
+    display: none;
+}
+
 /* Hero Section */
 .hero {
     background-image: url("../images/header/Header.png");
@@ -308,5 +312,3 @@ p {
     top: 1px;
     background-color: black;
 }
-
-

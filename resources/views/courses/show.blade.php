@@ -23,7 +23,7 @@
             <div class="carousel-inner">
                 @foreach($course->lessons->chunk(1) as $chunk)
                     <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                        <div class="row">
+                        <div class="row" style="margin-left: -50px; margin-right: -50px;">
                             @foreach($chunk as $lesson)
                                 <div class="col-md-4">
                                     <div class="course-li">
