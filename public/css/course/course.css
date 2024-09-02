@@ -45,7 +45,7 @@ p {
 
 .carousel-control-prev,
 .carousel-control-next {
-    width: 50%;
+    width: 6%;
 }
 
 .carousel-inner {
@@ -71,13 +71,15 @@ p {
 
 /* Стили для отдельных уроков */
 .course-li {
+    display: inline-block;
     border-radius: 10px;
-    padding: 0;
+    padding: 35px;
     text-align: center;
 }
 
 .course-h3 {
     margin-bottom: 20px;
+    display: inline-block;
     color: #fff;
 }
 
