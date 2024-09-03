@@ -4,7 +4,8 @@
     <title>{{ $course->description }}</title>
     @include('includes.head')
     <link rel="stylesheet" href="{{ asset('css/toast-message.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/course.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/course/course.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/course/course-mobile.css') }}">
 </head>
 <body>
 

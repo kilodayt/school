@@ -1,0 +1,26 @@
+/* Mobile Styles */
+@media (max-width: 768px) {
+
+    .featured-courses .container {
+        margin-top: 100px;
+    }
+
+    .carousel-inner {
+        display: inline-block;
+    }
+
+    .carousel-item .course-li {
+        margin-bottom: 0;
+    }
+
+    .course-h3 {
+        margin-bottom: 0;
+        text-align: center;
+        font-size: 25px;
+    }
+
+    .course-p {
+        display: none;
+        visibility: hidden;
+    }
+}
