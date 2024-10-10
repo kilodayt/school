@@ -38,8 +38,12 @@ Route::get('/course/{course_id}/lessons/{id}', [LessonController::class, 'show']
 
 // ЛК пользоватля
 Route::get('/profile', function () {
-    return view('about'); // Здесь должно быть представление профиля
-})->name('profile');
+    return view('user/profile');
+})->name('user.profile');
+
+Route::get('/user_courses', function () {
+    return view('user/courses');
+})->name('user.courses');
 
 Auth::routes();
 
