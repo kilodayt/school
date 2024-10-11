@@ -1,0 +1,79 @@
+/* Profile Styles */
+.profile-container {
+    background-color: rgba(0, 0, 51, 0.8);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    color: #fff;
+}
+
+.profile-title {
+    font-size: 36px;
+    font-weight: bold;
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.profile-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+}
+
+.profile-info, .profile-actions {
+    width: 45%;
+}
+
+.profile-section-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+    color: #fff;
+}
+
+.profile-info-item {
+    margin-bottom: 15px;
+}
+
+.profile-info-item .label {
+    font-weight: bold;
+    color: #ffcc00;
+}
+
+.profile-info-item .value {
+    color: #fff;
+    margin-left: 10px;
+}
+
+.profile-actions-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.profile-actions-list li {
+    margin-bottom: 15px;
+}
+
+.profile-actions-list .btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.profile-actions-list .btn:hover {
+    background-color: #0056b3;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}

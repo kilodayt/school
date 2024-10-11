@@ -36,5 +36,14 @@ Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.sh
 Route::get('/course/{course_id}/lessons', [LessonController::class, 'index'])->name('lessons.index')->middleware('auth');
 Route::get('/course/{course_id}/lessons/{id}', [LessonController::class, 'show'])->name('lessons.show')->middleware('auth');
 
+// ЛК пользоватля
+Route::get('/profile', function () {
+    return view('user/profile');
+})->name('user.profile');
+
+Route::get('/user_courses', function () {
+    return view('user/courses');
+})->name('user.courses');
+
 Auth::routes();
 
