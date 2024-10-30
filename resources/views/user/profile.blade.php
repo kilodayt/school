@@ -31,7 +31,7 @@
         <div class="profile-actions">
             <h3 class="profile-section-title">Действия</h3>
             <ul class="profile-actions-list">
-                <li><a class="btn" href="#!">Мои курсы</a></li>
+                <li><a class="btn" href="/user/{id}/courses">Мои курсы</a></li>
                 <li><a class="btn" href="#!">Настройки профиля</a></li>
                 <li><a class="btn btn-danger" href="{{ route('logout') }}"
                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

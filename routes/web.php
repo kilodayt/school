@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LessonController;
-
+use App\Http\Controllers\UserController;
 
 // Главная
 Route::get('/', function () {
@@ -41,9 +41,7 @@ Route::get('/profile', function () {
     return view('user/profile');
 })->name('user.profile');
 
-Route::get('/user_courses', function () {
-    return view('user/courses');
-})->name('user.courses');
+Route::get('/user/{id}/courses', [UserController::class, 'showCourses'])->name('user.courses');
 
 Auth::routes();
 
