@@ -1,0 +1,3 @@
+.keyword { color: blue; font-weight: bold; }
+.operator { color: red; }
+.comment { color: green; font-style: italic; }

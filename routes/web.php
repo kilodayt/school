@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PythonCompilerController;
 
 // Главная
 Route::get('/', function () {
@@ -42,6 +43,8 @@ Route::get('/user', function () {
 })->name('user.user');
 
 Route::get('/user/{id}/courses', [UserController::class, 'showCourses'])->name('user.courses');
+
+Route::post('/run-python', [PythonCompilerController::class, 'execute'])->name('run-python');
 
 Auth::routes();
 
