@@ -31,7 +31,7 @@
 
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                         <!-- Добавляем новые ссылки для профиля и моих курсов -->
-                        <a class="dropdown-item" href="{{ route('user.profile') }}">Профиль</a>
+                        <a class="dropdown-item" href="{{ route('user.user') }}">Профиль</a>
                         <a class="dropdown-item" href="{{ route('user.courses', ['id' => Auth::user()->id]) }}">Мои курсы</a>
 
                         <!-- Ссылка для выхода -->

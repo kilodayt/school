@@ -48,22 +48,32 @@
         </div>
 
         @auth
-            <!-- Если пользователь авторизован, ссылка ведет к урокам -->
-            <a href="{{ route('lessons.index', ['course_id' => $course->id]) }}" class="btn-secondary">Изучать</a>
+            @if ($hasCourse)
+                <!-- Если у пользователя есть доступ к курсу -->
+                <a href="{{ route('lessons.index', ['course_id' => $course->id]) }}" class="btn-secondary">Изучать</a>
+            @else
+                <!-- Если у пользователя нет доступа к курсу -->
+                <a href="javascript:void(0);" class="btn-secondary" onclick="showAuthAlert('accessToast')">Изучать</a>
+            @endif
         @else
-            <!-- Если пользователь не авторизован, показываем всплывающее сообщение -->
-            <a href="javascript:void(0);" class="btn-secondary" onclick="showAuthAlert()">Изучать</a>
+            <!-- Если пользователь не авторизован -->
+            <a href="javascript:void(0);" class="btn-secondary" onclick="showAuthAlert('authToast')">Изучать</a>
         @endauth
 
-        <!-- Всплывающее сообщение -->
+
+        <!-- Всплывающие сообщения -->
         <div id="authToast" class="toast-message">
             <p>Пожалуйста, авторизуйтесь, чтобы продолжить изучение курса.</p>
         </div>
 
+        <div id="accessToast" class="toast-message">
+            <p>Пожалуйста, зарегестрируйтесь на этот курс для изучения.</p>
+        </div>
+
         <!-- JavaScript -->
         <script>
-            function showAuthAlert() {
-                var toastEl = document.getElementById('authToast');
+            function showAuthAlert(message) {
+                var toastEl = document.getElementById(message);
                 toastEl.classList.add('show'); // Показываем Toast
 
                 // Автоматическое скрытие через 3 секунды

@@ -37,9 +37,9 @@ Route::get('/course/{course_id}/lessons', [LessonController::class, 'index'])->n
 Route::get('/course/{course_id}/lessons/{id}', [LessonController::class, 'show'])->name('lessons.show')->middleware('auth');
 
 // ЛК пользоватля
-Route::get('/profile', function () {
+Route::get('/user', function () {
     return view('user/profile');
-})->name('user.profile');
+})->name('user.user');
 
 Route::get('/user/{id}/courses', [UserController::class, 'showCourses'])->name('user.courses');
 
