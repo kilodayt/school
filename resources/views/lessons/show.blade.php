@@ -7,10 +7,16 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
     <link rel="stylesheet" href="{{ asset('css/lessons/lessons-show.css') }}">
     <link rel="stylesheet" href="{{ asset('css/lessons/lessons-mobile.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
-    <script src="{{ asset('js/highlight.js') }}"></script>
-    <script src="{{ asset('js/autocomplete.js') }}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
 </head>
+
+<style>
+
+    .CodeMirror pre.CodeMirror-line, .CodeMirror pre.CodeMirror-line-like {
+        padding: 0 40px;
+    }
+
+</style>
 
 <body>
 
@@ -60,23 +66,26 @@
             <p>{!! $exessizeText !!}</p>
             <h1>Python Компилятор</h1>
 
-            <!-- Поле для ввода Python-кода -->
-            <textarea id="codeEditor" oninput="highlightCode()" rows="10" cols="60" placeholder="Введите ваш Python код..." style="width: 100%; resize: none;"></textarea>
-            <pre id="highlightedCode" style="background: #f8f8f8; border: 1px solid #ddd; padding: 10px; margin-top: 10px; overflow: auto;"></pre>
+            <!-- CodeMirror Editor -->
+            <div class="editor-container">
+                <textarea id="codeEditor" rows="10" cols="60" placeholder="Введите ваш Python код..."></textarea>
+            </div>
+
             <br>
             <button id="runButton">Запустить код</button>
 
             <!-- Вывод результата -->
             <h3>Результат:</h3>
-            <pre id="output" style="background: #f8f8f8; border: 1px solid #ddd; padding: 10px;"></pre>
+            <pre id="output" style="background: #f8f8f8; border: 1px solid #ddd; padding: 20px; position: relative;"></pre>
         </div>
     </div>
 </div>
 
 @include('includes.footer')
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
 <script>
-    // JavaScript для управления видимостью секций контента
     document.addEventListener('DOMContentLoaded', function() {
         const links = document.querySelectorAll('.nav-links a');
         const sections = document.querySelectorAll('.content-section');
@@ -97,83 +106,49 @@
             });
         });
     });
-</script>
 
-<!-- JavaScript для отправки кода на сервер -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $('#runButton').on('click', function () {
-        var code = $('#codeEditor').val();
-
-        $.ajax({
-            url: '{{ route("run-python") }}',
-            type: 'POST',
-            data: {
-                code: code,
-                _token: '{{ csrf_token() }}'
-            },
-            success: function (response) {
-                $('#output').text(response.output);
-            },
-            error: function (xhr) {
-                $('#output').text(xhr.responseJSON.output);
-            }
-        });
+    // Initialize CodeMirror editor with Python mode
+    const editor = CodeMirror.fromTextArea(document.getElementById('codeEditor'), {
+        mode: "python",
+        lineNumbers: true,
+        theme: "default"
     });
 
+    // Run code on button click
     document.getElementById('runButton').addEventListener('click', function() {
-        const code = document.getElementById('codeEditor').value;
+        const code = editor.getValue();
 
-        // Отправляем код на сервер для выполнения
         fetch('/run-python', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Не забудьте включить CSRF-токен
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             body: JSON.stringify({ code: code })
         })
             .then(response => response.json())
             .then(data => {
-                // Обновляем поле вывода результатом выполнения кода
-                document.getElementById('output').textContent = data.output || data.error;
+                const outputElement = document.getElementById('output');
+                const lines = (data.output || data.error || '').split('\n');
+
+                if (lines.length > 20) {
+                    outputElement.textContent = lines.slice(0, 19).join('\n');
+                    const showMoreButton = document.createElement('button');
+                    showMoreButton.textContent = 'Показать больше';
+                    showMoreButton.onclick = () => {
+                        outputElement.textContent = lines.join('\n');
+                        showMoreButton.remove();
+                    };
+                    outputElement.appendChild(showMoreButton);
+                } else {
+                    outputElement.textContent = lines.join('\n');
+                }
             })
             .catch(error => {
                 document.getElementById('output').textContent = 'Ошибка выполнения: ' + error.message;
             });
     });
-
-    document.getElementById('codeEditor').addEventListener('keydown', function(event) {
-        if (event.key === 'Tab') {
-            event.preventDefault(); // Отменяем стандартное действие (фокус на следующем элементе)
-
-            // Вставляем символ табуляции
-            const start = this.selectionStart;
-            const end = this.selectionEnd;
-
-            // Устанавливаем новое значение текста с символом табуляции
-            this.value = this.value.substring(0, start) + '\t' + this.value.substring(end);
-
-            // Устанавливаем курсор в правильное положение
-            this.selectionStart = this.selectionEnd = start + 1;
-
-            highlightCode(); // Обновляем подсветку кода
-        }
-    });
-
-    function highlightCode() {
-        const code = $('#codeEditor').val();
-        const highlighted = code
-            .replace(/(for|in|def|class|if|else|elif|while|try|except|with|import|as|from|return|print|range|and|or|not)/g, '<span style="color: blue;">$1</span>')
-            .replace(/"(.*?)"/g, '<span style="color: green;">"$1"</span>')
-            .replace(/'(.*?)'/g, '<span style="color: green;">\'$1\'</span>');
-
-        $('#highlightedCode').html(highlighted.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
-    }
-
-    highlightCode();
 </script>
 
 </body>
-
 </html>
