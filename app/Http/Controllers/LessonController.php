@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Lesson;
 use App\Models\LessonDetail;
 use App\Models\Course;
+use App\Models\Progress;
+use Illuminate\Support\Facades\Auth;
 
 class LessonController extends Controller
 {
@@ -42,43 +44,58 @@ class LessonController extends Controller
     // Показать конкретный урок
     public function show($course_id, $lesson_id)
     {
-        // Проверка диапазона lesson_id
         if ($lesson_id < 1 || $lesson_id > 20) {
-            abort(404, 'Урок не найден'); // Возвращаем 404, если lesson_id вне диапазона
+            abort(404, 'Урок не найден');
         }
 
-        // Получаем курс с уроками
         $course = Course::with('lessons')->findOrFail($course_id);
 
-        // Получаем конкретный урок по course_id и lesson_id
         $lesson = Lesson::where('course_id', $course_id)
             ->where('lesson_id', $lesson_id)
             ->first();
 
-        // Если урок не найден
         if (!$lesson) {
             abort(404, 'Урок не найден');
         }
 
-        // Получаем детали урока
-        $lessonDetails = LessonDetail::where('lesson_id', $lesson_id)->where('course_id', $course_id)->first();
+        $lessonDetails = LessonDetail::where('lesson_id', $lesson_id)
+            ->where('course_id', $course_id)
+            ->first();
 
-        // Функция для извлечения первого предложения
         function formatText($text) {
-            // Заменяем двойные переносы строк на закрывающий и открывающий тег <p> для разделения на абзацы
-            $text = nl2br(e($text)); // Преобразование символов новой строки в <br> и экранирование HTML
-            return $text;
+            return nl2br(e($text));
         }
 
         $theory1Text = formatText($lessonDetails->theory_1);
         $theory2Text = formatText($lessonDetails->theory_2);
         $theory3Text = formatText($lessonDetails->theory_3);
         $exessizeText = formatText($lessonDetails->exessize);
-        // Получаем все уроки курса
         $lessons = $course->lessons;
 
-        // Передаем данные в представление
-        return view('lessons.show', compact('course', 'lesson', 'lessonDetails', 'lessons', 'theory1Text', 'theory2Text', 'theory3Text', 'exessizeText'));
+        // Получение прогресса пользователя
+        $userId = Auth::id();
+        $completedLessons = Progress::where('user_id', $userId)
+            ->whereIn('lesson_id', $lessons->pluck('id'))
+            ->pluck('lesson_id')
+            ->toArray();
+
+        $totalLessons = $lessons->count();
+        $completedLessonsCount = count($completedLessons);
+
+        // Передача данных в представление
+        return view('lessons.show', compact(
+            'course',
+            'lesson',
+            'lessonDetails',
+            'lessons',
+            'theory1Text',
+            'theory2Text',
+            'theory3Text',
+            'exessizeText',
+            'completedLessons',
+            'totalLessons',
+            'completedLessonsCount'
+        ));
     }
 
     // Показать форму для редактирования урока

@@ -6,6 +6,8 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PythonCompilerController;
+use App\Http\Controllers\ProgressController;
+
 
 // Главная
 Route::get('/', function () {
@@ -45,6 +47,8 @@ Route::get('/user', function () {
 Route::get('/user/{id}/courses', [UserController::class, 'showCourses'])->name('user.courses');
 
 Route::post('/run-python', [PythonCompilerController::class, 'execute'])->name('run-python');
+
+Route::post('/update-progress', [ProgressController::class, 'updateProgress'])->name('updateProgress');
 
 Auth::routes();
 

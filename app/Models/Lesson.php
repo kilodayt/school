@@ -21,4 +21,14 @@ class Lesson extends Model
     {
         return $this->hasOne(Course::class);
     }
+
+    public function progress()
+    {
+        return $this->hasMany(Progress::class);
+    }
+
+    public function details()
+    {
+        return $this->hasOne(LessonDetail::class, 'lesson_id');
+    }
 }

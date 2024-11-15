@@ -4,15 +4,30 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class PythonCompilerController extends Controller
 {
     public function execute(Request $request)
     {
         try {
-            // Получаем код из запроса
+            // Получаем код и идентификатор задания из запроса
             $code = $request->input('code');
+            $lesson_id = $request->input('lesson_id');
+
+            // Допустимые результаты для каждого задания (массив возможных ответов)
+            $expectedOutputs = [
+                1 => ['hello world', 'Hello, world!', 'HELLO WORLD', 'Hello, world', 'Hello world'],
+                2 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+                3 => ['Python is awesome', 'I love Python', 'Python is great'],
+                // Добавить все задания
+            ];
+
+            // Проверяем, что задание с таким ID существует
+            if (!isset($expectedOutputs[$lesson_id])) {
+                return response()->json(['error' => 'Неверный идентификатор задания.'], 400);
+            }
+
+            $acceptableOutputs = $expectedOutputs[$lesson_id];
 
             // Сохраняем код во временный файл
             $filePath = storage_path('app/temp_code.py');
@@ -33,48 +48,37 @@ class PythonCompilerController extends Controller
 
             // Проверяем наличие ошибок
             if (!$process->isSuccessful()) {
-                // Получаем оригинальный вывод ошибки
                 $errorOutput = $process->getErrorOutput();
-
-                // Убираем путь к файлу с помощью регулярного выражения
                 $filteredErrorOutput = preg_replace('/File "(.*?)"/', 'File "main.py"', $errorOutput);
-
-                // Возвращаем отфильтрованное сообщение об ошибке
                 return response()->json(['output' => $filteredErrorOutput], 400);
             }
 
-            // Возвращаем результат выполнения
-            return response()->json(['output' => $process->getOutput()]);
+            // Получаем вывод от выполнения кода
+            $output = trim($process->getOutput());
+
+            // Проверка, совпадает ли вывод с любым из допустимых вариантов
+            $isCorrect = in_array($output, $acceptableOutputs);
+
+            return response()->json([
+                'output' => $output,
+                'isCorrect' => $isCorrect,
+                'message' => $isCorrect ? 'Задание выполнено правильно!' : 'Неправильный ответ. Попробуйте снова.',
+            ]);
         } catch (\Exception $e) {
-            // Ловим любые ошибки и возвращаем их
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
     private function checkSyntax($filePath)
     {
-        // Проверка синтаксиса с помощью компиляции
         $command = escapeshellcmd("python -m py_compile $filePath");
         $output = shell_exec($command);
 
         if (strpos($output, 'Error') !== false) {
-            // Возвращаем ошибку
             return "Syntax error found!";
         }
 
         return "No syntax errors.";
     }
-
-    private function formatPythonCode($code)
-    {
-        // Правило для добавления отступов перед строками, которые начинаются с ключевых слов блоков кода
-        $code = preg_replace('/\b(def|class|if|else|for|while|try|except|with)\b/', '    $0', $code);
-
-        // Замена табуляции на 4 пробела для соответствия стилю Python
-        $code = str_replace("\t", "    ", $code);
-
-        return $code;
-    }
-
-    // Удален метод runPythonCode, так как его логика была интегрирована в execute
 }
+
