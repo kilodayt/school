@@ -120,6 +120,7 @@
         const code = editor.getValue();
         const lesson_id = {{ $lesson->lesson_id }};
 
+
         fetch('/run-python', {
             method: 'POST',
             headers: {
@@ -164,8 +165,10 @@
                         .then(progressData => {
                             if (progressData.status === 'success') {
                                 console.log('Прогресс обновлен успешно');
+                            } else if (progressData.error) {
+                                console.error('Ошибка при обновлении прогресса:', progressData.error);
                             } else {
-                                console.log('Ошибка при обновлении прогресса');
+                                console.error('Неизвестная ошибка при обновлении прогресса');
                             }
                         })
                         .catch(error => {

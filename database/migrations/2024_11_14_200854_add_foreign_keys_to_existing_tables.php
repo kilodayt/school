@@ -9,13 +9,13 @@ class AddForeignKeysToExistingTables extends Migration
     public function up()
     {
         Schema::table('progress', function (Blueprint $table) {
-            $table->unsignedBigInteger('lesson_id')->change();
-            $table->foreign('lesson_id')->references('lesson_id')->on('lessons')->onDelete('cascade');
+            //$table->unsignedBigInteger('lesson_id')->change();
+            //$table->foreign('lesson_id')->references('lesson_id')->on('lessons')->onDelete('cascade');
         });
 
         Schema::table('lesson_details', function (Blueprint $table) {
-            $table->unsignedBigInteger('lesson_id')->change();
-            $table->foreign('lesson_id')->references('lesson_id')->on('lessons')->onDelete('cascade');
+            //$table->unsignedBigInteger('lesson_id')->change();
+            //$table->foreign('lesson_id')->references('lesson_id')->on('lessons')->onDelete('cascade');
         });
     }
 

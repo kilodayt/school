@@ -1,5 +1,10 @@
 /* Мобильные стили */
 @media (max-width: 768px) {
+
+    .progress-bar {
+        visibility: hidden;
+    }
+
     .lessons-container {
         flex-direction: column; /* Столбцы становятся строками на мобильных устройствах */
         align-items: center; /* Центрируем элементы по горизонтали */

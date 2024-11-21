@@ -17,7 +17,21 @@ class LessonController extends Controller
         $course = Course::with('lessons')->findOrFail($course_id); // Найти курс по ID вместе с уроками
         $lessons = $course->lessons; // Получить все уроки курса
 
-        return view('lessons.index', compact('course', 'lessons')); // Передаем курс и уроки в представление
+        $userId = Auth::id();
+        $completedLessons = Progress::where('user_id', $userId)
+            ->whereIn('lesson_id', $lessons->pluck('id'))
+            ->pluck('lesson_id')
+            ->toArray();
+
+        $totalLessons = $lessons->count();
+        $completedLessonsCount = count($completedLessons);
+
+        return view('lessons.index', compact(
+            'course',
+            'lessons',
+            'completedLessons',
+            'totalLessons',
+            'completedLessonsCount')); // Передаем курс и уроки в представление
     }
 
     // Показать форму для создания нового урока

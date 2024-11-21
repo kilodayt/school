@@ -3,6 +3,8 @@
 
 <head>
     @include('includes.head')
+    <link rel="stylesheet" href="{{ asset('css/course/course.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/course/course-mobile.css') }}">
     <title>Наши курсы</title>
 </head>
 
