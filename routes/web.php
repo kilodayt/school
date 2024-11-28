@@ -57,7 +57,9 @@ Route::post('/run-python', [PythonCompilerController::class, 'execute'])->name('
 // Обновление прогресса
 Route::post('/update-progress', [ProgressController::class, 'updateProgress'])->name('updateProgress');
 
-
+Route::get('/add-user', [UserController::class, 'showForm'])->name('users.add');
+Route::post('/add-user', [UserController::class, 'storeUser'])->name('users.store');
+Route::post('/assign-course', [UserController::class, 'assignCourse'])->name('users.assignCourse');
 
 Auth::routes();
 
