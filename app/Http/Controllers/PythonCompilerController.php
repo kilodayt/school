@@ -19,6 +19,8 @@ class PythonCompilerController extends Controller
                 1 => ['hello world', 'Hello, world!', 'HELLO WORLD', 'Hello, world', 'Hello world'],
                 2 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
                 3 => ['Python is awesome', 'I love Python', 'Python is great'],
+                21 => [1],
+                22 => [1],
                 // Добавить все задания
             ];
 

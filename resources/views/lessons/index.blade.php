@@ -25,7 +25,7 @@
     <div class="lessons-list">
         <h3>Уроки</h3>
         @foreach($lessons as $lessonItem)
-            <div class="lesson-item {{ in_array($lessonItem->lesson_id, $completedLessons) ? 'completed' : '' }}">
+            <div class="lesson-item {{ in_array($lessonItem->id, $completedLessons) ? 'completed' : '' }}">
                 <a href="{{ route('lessons.show', ['course_id' => $course->id, 'id' => $lessonItem->lesson_id]) }}">
                     {{ request()->is('lessons/'.$lessonItem->lesson_id) ? 'active' : '' }}
                     {{ $lessonItem->title }}

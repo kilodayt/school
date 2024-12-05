@@ -2,14 +2,14 @@
 <html lang="en">
 
 <head>
-    @include('includes.head')
     <link rel="stylesheet" href="{{ asset('css/blog/blog.css') }}">
+    @include('includes.head')
     <title>О нас</title>
 </head>
 
-<body>
+<body class="card_body">
 @include('includes.header')
-<div class="container">
+<div class="blog_container">
     <h1 class="my-4">Блог</h1>
 
     @if($posts->count())

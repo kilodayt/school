@@ -1,0 +1,92 @@
+/* Основные стили для таблиц */
+table {
+    width: 90%;
+    border-collapse: collapse;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    background-color: #f9f9f9;
+}
+
+/* Заголовок таблицы */
+table th {
+    background-color: rgba(0, 0, 51, 0.8);
+    text-align: center;
+    color: white;
+    padding: 12px 15px;
+    font-weight: bold;
+    border: 1px solid #ddd;
+}
+
+/* Ячейки таблицы */
+table td {
+    color: rgba(0, 0, 51, 0.8);
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+/* Полосатая таблица */
+table tr:nth-child(even) {
+    background-color: #b1ccc8;
+}
+
+/* Выделение строки при наведении */
+table tr:hover {
+    background-color: #b4dede;
+}
+
+/* Адаптивность таблиц */
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* Кнопки в таблицах */
+table td .btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+/* Кнопки действия */
+table td .btn-primary {
+    background-color: #4CAF50;
+}
+
+table td .btn-danger {
+    background-color: #f44336;
+}
+
+table td .btn-primary:hover,
+table td .btn-danger:hover {
+    opacity: 0.9;
+}
+
+.btn-secondary1 {
+    background-color: #ffffff;
+    justify-content: center;
+    margin-bottom: 150px;
+    padding: 7px 22px;
+    display: flex;
+    border-radius: 5px;
+    font-size: 18px;
+    color: rgba(0, 0, 51, 0.8);
+    transition: background-color 0.2s ease-in, top 0.2s ease-in;
+}
+
+.btn-secondary1:hover {
+    color: #fff;
+    background-color: #5a6268;
+    border-color: #545b62;
+    text-decoration: none;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    body {
+        margin-top: 200px;
+    }
+}

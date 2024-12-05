@@ -148,27 +148,24 @@
              data-aos-duration="2000"
              class="blog-post">
             <img src="https://via.placeholder.com/300" alt="Blog 1">
-            <h3>Статья 1</h3>
-            <p>Описание статьи 1</p>
-            <a href="#!" class="btn-secondary">Читать больше</a>
+            <h3>Как стать веб-разработчиком</h3>
+            <a href="{{ route('blog.show', ['slug' => 'kak-stat-veb-razrabotchikom']) }}" class="btn-secondary">Читать больше</a>
         </div>
         <div data-aos="flip-left"
              data-aos-easing="ease-out-cubic"
              data-aos-duration="2000"
              class="blog-post">
             <img src="https://via.placeholder.com/300" alt="Blog 2">
-            <h3>Статья 2</h3>
-            <p>Описание статьи 2</p>
-            <a href="#!" class="btn-secondary">Читать больше</a>
+            <h3>10 советов для программистов</h3>
+            <a href="{{ route('blog.show', ['slug' => '10-sovetov-dlya-programmistov']) }}" class="btn-secondary">Читать больше</a>
         </div>
         <div data-aos="flip-left"
              data-aos-easing="ease-out-cubic"
              data-aos-duration="2000"
              class="blog-post">
             <img src="https://via.placeholder.com/300" alt="Blog 3">
-            <h3>Статья 3</h3>
-            <p>Описание статьи 3</p>
-            <a href="#!" class="btn-secondary">Читать больше</a>
+            <h3>Обзор языков программирования</h3>
+            <a href="{{ route('blog.show', ['slug' => 'obzor-yazykov-programmirovaniya']) }}" class="btn-secondary">Читать больше</a>
         </div>
     </div>
 </section>

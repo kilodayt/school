@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         // Другие middleware
         'store.previous.url' => \App\Http\Middleware\StorePreviousUrl::class,
+        'role' => \App\Http\Middleware\RoleMiddleware::class,
     ];
 }

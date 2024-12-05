@@ -51,6 +51,7 @@ button {
     display: block;
     width: 100%;
     padding: 10px 15px;
+    margin-bottom: 30px;
     background-color: #4a90e2; /* Синий фон кнопки */
     color: white;
     font-size: 1rem;

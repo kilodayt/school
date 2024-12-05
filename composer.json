@@ -5,7 +5,7 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.1.9",
+        "php": ">=8.1.9",
         "ext-http": "*",
         "encore/laravel-admin": "^1.8",
         "guzzlehttp/guzzle": "^7.2",

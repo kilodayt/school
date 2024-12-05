@@ -33,7 +33,7 @@
     <div class="lessons-list">
         <h3>Уроки</h3>
         @foreach($lessons as $lessonItem)
-            <div class="lesson-item {{ in_array($lessonItem->lesson_id, $completedLessons) ? 'completed' : '' }}">
+            <div class="lesson-item {{ in_array($lessonItem->id, $completedLessons) ? 'completed' : '' }}">
                 <a href="{{ route('lessons.show', ['course_id' => $course->id, 'id' => $lessonItem->lesson_id]) }}">
                     {{ request()->is('lessons/'.$lessonItem->lesson_id) ? 'active' : '' }}
                     {{ $lessonItem->title }}
@@ -74,7 +74,7 @@
             </div>
 
             <br>
-            <button id="runButton" data-lesson-id="{{ $lesson->lesson_id }}">Запустить код</button>
+            <button id="runButton" data-lesson-id="{{ $lesson->id }}">Запустить код</button>
 
             <!-- Вывод результата -->
             <h3>Результат:</h3>
@@ -118,7 +118,7 @@
     // Run code on button click
     document.getElementById('runButton').addEventListener('click', function() {
         const code = editor.getValue();
-        const lesson_id = {{ $lesson->lesson_id }};
+        const lesson_id = {{ $lesson->id }};
 
 
         fetch('/run-python', {

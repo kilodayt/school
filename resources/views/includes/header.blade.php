@@ -11,6 +11,7 @@
                 <li class="nav-item"><a class="nav-link" href="/courses">Курсы</a></li>
                 <li class="nav-item"><a class="nav-link" href="/about">О нас</a></li>
                 <li class="nav-item"><a class="nav-link" href="/contacts">Контакты</a></li>
+                <li class="nav-item"><a class="nav-link" href="/blog">Блог</a></li>
             </ul>
         </nav>
 
