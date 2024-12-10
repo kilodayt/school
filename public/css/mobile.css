@@ -5,7 +5,8 @@
         width: 100%;
         padding: 10px;
         display: inline-block;
-        margin: 100px 0 0 0;
+        margin: 20px 0 0;
+        margin-top: 136px;
     }
 
     header {
@@ -19,7 +20,7 @@
         padding: 10px 0;
     }
 
-    .header-container {
+    .header-container, .nav ul {
         flex-direction: column;
         align-items: center;
     }
@@ -33,10 +34,6 @@
 
     .menu-toggle {
         display: block;
-    }
-    /* Кнопка для открытия меню */
-    .menu-toggle {
-        display: block;
         background: none;
         border: none;
         cursor: pointer;
@@ -44,7 +41,7 @@
         z-index: 1002;
     }
 
-    .menu-icon {
+    .menu-icon, .menu-icon::before, .menu-icon::after {
         display: block;
         width: 30px;
         height: 2px;
@@ -52,29 +49,18 @@
         position: relative;
     }
 
-    .menu-icon::before,
-    .menu-icon::after {
+    .menu-icon::before, .menu-icon::after {
         content: '';
-        display: block;
-        width: 30px;
-        height: 2px;
-        background: #fff;
         position: absolute;
         left: 0;
     }
 
     .nav {
-        display: none; /* Скрываем меню по умолчанию */
+        display: none;
     }
 
     .menu-toggle.active + .nav {
         display: block;
-    }
-
-    nav ul {
-        flex-direction: column;
-        align-items: center;
-        padding: 0;
     }
 
     nav ul li {
@@ -91,57 +77,55 @@
         font-size: 2rem;
     }
 
-    .course, .step, .testimonial, .instructor, .blog-post {
+    .step, .testimonial, .instructor, .benefit {
         display: block;
         width: 90%;
         margin: 20px auto;
+        text-align: -webkit-center;
     }
 
-    .benefit {
-        width: 100%; /* Каждый блок занимает всю ширину */
-        max-width: 400px; /* Ограничиваем максимальную ширину для больших экранов */
-        margin: 20px 0; /* Добавляем отступы между блоками */
-        text-align: center; /* Центрируем текст внутри каждого блока */
+    .course, .blog-post {
+        display: block;
+        width: 90%;
+        margin: 50px auto;
+        text-align: -webkit-center;
     }
 
-    .benefits .container {
-        width: 100%;
-        padding: 10px;
-        display: flex;
-        flex-direction: column; /* Размещаем блоки по одному в строке */
-        align-items: center; /* Центрируем блоки по горизонтали */
+    .benefits, .how-it-works {
+        text-align: -webkit-center;
+    }
 
+    .benefits, .featured-courses, .how-it-works, .testimonials,
+    .our-instructors, .blog, .contacts {
+        padding: 5px 0;
     }
 
     .benefit .icon {
-        font-size: 50px; /* Увеличиваем размер иконки */
-        margin-bottom: 15px; /* Добавляем отступ под иконкой */
+        font-size: 50px;
+        margin-bottom: 15px;
     }
 
-    .benefit h3 {
+    .benefit h3, .benefit p, .how-it-works h3 {
         text-align: center;
     }
 
-    .benefit p {
-        text-align: center; /* Центрирование текста абзацев */
-    }
-
-    .how-it-works .container {
-        width: 80%;
+    .how-it-works .container, .benefits .container {
+        width: 100%;
         padding: 10px;
         display: flex;
-        flex-direction: column; /* Размещаем блоки по одному в строке */
-        align-items: center; /* Центрируем блоки по горизонтали */
-    }
-
-    .how-it-works h3 {
-        text-align: center;
-    }
-
-    .blog-post .img {
-        display: inline-block;
+        flex-direction: column;
         align-items: center;
-        margin-right: 300px;
+    }
+
+    .btn-primary, .btn-secondary, .btn-login, .dropdown {
+        display: block;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+    }
+
+    .hero .btn-primary {
+        width: auto;
     }
 
     .testimonials {
@@ -151,50 +135,5 @@
     .contact-social {
         flex-direction: row;
         row-gap: 20px;
-    }
-
-    .btn-primary, .btn-secondary {
-        display: block;
-        margin: 10px auto;
-        text-align: center;
-    }
-
-    .dropdown {
-        display: block;
-        margin: 10px auto;
-        text-align: center;
-    }
-
-    /* Adjusting specific sections for better mobile view */
-    .benefit {
-        width: 90%;
-    }
-
-    .course {
-        width: 90%;
-    }
-
-    .step {
-        width: 90%;
-    }
-
-    .testimonial {
-        width: 90%;
-    }
-
-    .instructor {
-        width: 90%;
-    }
-
-    .blog-post {
-        width: 90%;
-    }
-
-    .btn-login, .btn-primary, .btn-secondary {
-        width: 100%;
-    }
-
-    .hero .btn-primary {
-        width: auto;
     }
 }

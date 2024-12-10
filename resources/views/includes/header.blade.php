@@ -7,11 +7,25 @@
         </button>
         <nav>
             <ul class="nav">
-                <li class="nav-item"><a class="nav-link" href="/">Главная</a></li>
-                <li class="nav-item"><a class="nav-link" href="/courses">Курсы</a></li>
-                <li class="nav-item"><a class="nav-link" href="/about">О нас</a></li>
-                <li class="nav-item"><a class="nav-link" href="/contacts">Контакты</a></li>
-                <li class="nav-item"><a class="nav-link" href="/blog">Блог</a></li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="/">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('courses') ? 'active' : '' }}"
+                       href="/courses">Курсы</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('about') ? 'active' : '' }}" href="/about">О
+                        нас</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('contacts') ? 'active' : '' }}"
+                       href="/contacts">Контакты</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('blog') ? 'active' : '' }}"
+                       href="/blog">Блог</a>
+                </li>
             </ul>
         </nav>
 
@@ -26,14 +40,16 @@
             @else
                 <!-- Dropdown -->
                 <div class="dropdown">
-                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ Auth::user()->name }}
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                         <!-- Добавляем новые ссылки для профиля и моих курсов -->
                         <a class="dropdown-item" href="{{ route('user.user') }}">Профиль</a>
-                        <a class="dropdown-item" href="{{ route('user.courses', ['id' => Auth::user()->id]) }}">Мои курсы</a>
+                        <a class="dropdown-item" href="{{ route('user.courses', ['id' => Auth::user()->id]) }}">Мои
+                            курсы</a>
 
                         <!-- Ссылка для выхода -->
                         <a class="dropdown-item" href="{{ route('logout') }}"
@@ -58,10 +74,10 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         let loginButton = document.querySelector('.btn-primary[href="{{ route('login') }}"]');
         if (loginButton) {
-            loginButton.addEventListener('click', function(e) {
+            loginButton.addEventListener('click', function (e) {
                 e.preventDefault();
                 let intendedUrl = window.location.href;
                 localStorage.setItem('intended_url', intendedUrl);
@@ -70,11 +86,11 @@
         }
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         var menuToggle = document.querySelector('.menu-toggle');
         var nav = document.querySelector('.nav');
 
-        menuToggle.addEventListener('click', function() {
+        menuToggle.addEventListener('click', function () {
             this.classList.toggle('active');
             if (nav.style.display === 'block') {
                 nav.style.display = 'none';

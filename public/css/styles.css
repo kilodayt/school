@@ -58,6 +58,12 @@ nav ul li a {
     font-weight: 500;
 }
 
+.nav-link.active {
+    color: #ffd700; /* Золотистый цвет для выделения */
+    font-weight: bold;
+    border-bottom: 2px solid #ffd700; /* Подчеркивание активного элемента */
+}
+
 .menu-toggle {
     display: none;
 }

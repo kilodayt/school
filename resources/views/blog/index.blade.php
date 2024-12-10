@@ -3,13 +3,14 @@
 
 <head>
     <link rel="stylesheet" href="{{ asset('css/blog/blog.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/blog/blog-mobile.css') }}">
     @include('includes.head')
     <title>О нас</title>
 </head>
 
 <body class="card_body">
 @include('includes.header')
-<div class="blog_container">
+<div class="blog-container">
     <h1 class="my-4">Блог</h1>
 
     @if($posts->count())

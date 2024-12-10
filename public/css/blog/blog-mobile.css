@@ -1,0 +1,6 @@
+/* Мобильные стили */
+@media (max-width: 768px) {
+    .blog-container {
+        margin-top: 175px;
+    }
+}

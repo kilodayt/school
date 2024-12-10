@@ -1,21 +1,34 @@
-
-
 .blog_container {
-    max-width: 800px;
+    max-width: 800px; /* Ограничение ширины для лучшего отображения контента */
     margin: 50px auto;
+    padding: 20px; /* Добавлено пространство вокруг контента */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Лёгкая тень для выделения */
+    background-color: #f9f9f9; /* Нежный фон */
+    border-radius: 10px;
 }
 
 h1 {
     text-align: center;
+    font-size: 2.5rem; /* Увеличен размер для более выразительного заголовка */
+    color: #ffffff; /* Более мягкий цвет для текста */
+    margin-bottom: 20px;
 }
 
 .card {
-    background-color: #ffffff; /* Цвет карточки */
-    color: #000000; /* Цвет текста внутри карточки */
+    color: #ffffff; /* Цвет текста внутри карточки */
     margin-bottom: 20px;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Более мягкая и заметная тень */
+    transition: transform 0.2s, box-shadow 0.2s; /* Анимация при наведении */
+    background-color: #00274d; /* Глубокий тёмный цвет фона */
+    left: 25%;
+    max-width: 50%;
+}
+
+.card:hover {
+    transform: scale(1.03); /* Увеличение при наведении */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Увеличенная тень при наведении */
 }
 
 .card img {
@@ -26,20 +39,26 @@ h1 {
 
 .card-body {
     padding: 20px;
+    background-color: rgba(0, 0, 51, 0.85); /* Чуть более насыщенный фон */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Более мягкий контур */
+    display: block;
+    justify-content: center;
 }
 
 .card-title {
-    font-size: 1.5rem;
+    font-size: 1.8rem; /* Увеличен размер для лучшего выделения */
     margin-bottom: 10px;
-    color: #1e1e50; /* Цвет заголовка карточки */
+    color: #ffffff; /* Золотистый цвет для выделения */
     text-align: center;
+    text-transform: uppercase; /* Заглавные буквы для выразительности */
 }
 
 .card-text {
     font-size: 1rem;
-    color: #555555;
+    color: #f0f0f0;
     margin-bottom: 20px;
     text-align: center;
+    line-height: 1.5; /* Улучшенная читаемость */
 }
 
 .btn-primary {

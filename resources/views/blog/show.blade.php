@@ -3,13 +3,15 @@
 
 <head>
     @include('includes.head')
+    <link rel="stylesheet" href="{{ asset('css/blog/blog.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/blog/blog-mobile.css') }}">
     <title>О нас</title>
 </head>
 
 <body>
 @include('includes.header')
 
-<div class="container">
+<div class="blog-container">
     <h1 class="my-4">{{ $post->title }}</h1>
 
     @if ($post->image)
