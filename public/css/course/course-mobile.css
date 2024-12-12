@@ -1,15 +1,20 @@
 /* Mobile Styles */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
 
-    .container {
-        width: 100%;
-        padding: 10px;
-        display: inline-block;
-        margin: 100px 0 0 0;
+
+
+    .courses-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0;
+    }
+
+    .course {
+        margin: 20px auto;
     }
 
     .featured-courses .container {
-        margin-top: 100px;
+        margin-top: 170px;
     }
 
     .carousel-inner {

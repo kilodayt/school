@@ -4,6 +4,8 @@
         <div class="logo">Proga</div>
         <button class="menu-toggle menu-toggle-test" aria-label="Открыть меню">
             <span class="menu-icon"></span>
+            <span class="menu-icon"></span>
+            <span class="menu-icon"></span>
         </button>
         <nav>
             <ul class="nav">
@@ -75,46 +77,34 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        let loginButton = document.querySelector('.btn-primary[href="{{ route('login') }}"]');
-        if (loginButton) {
-            loginButton.addEventListener('click', function (e) {
-                e.preventDefault();
-                let intendedUrl = window.location.href;
-                localStorage.setItem('intended_url', intendedUrl);
-                window.location.href = "{{ route('login') }}";
-            });
-        }
-    });
+        const menuToggle = document.querySelector('.menu-toggle');
+        const nav = document.querySelector('.nav');
+        const header = document.querySelector('header');
+        let lastScrollTop = 0;
 
-    document.addEventListener('DOMContentLoaded', function () {
-        var menuToggle = document.querySelector('.menu-toggle');
-        var nav = document.querySelector('.nav');
-
+        // Управление отображением меню
         menuToggle.addEventListener('click', function () {
             this.classList.toggle('active');
-            if (nav.style.display === 'block') {
-                nav.style.display = 'none';
+            nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Сброс стилей навигации при изменении размера окна
+        window.addEventListener('resize', function () {
+            if (window.innerWidth > 900) {
+                nav.style.display = 'flex';
+                menuToggle.style.display = 'none';
             } else {
-                nav.style.display = 'block';
+                nav.style.display = 'none';
+                menuToggle.style.display = 'block';
             }
         });
-    });
 
-    let lastScrollTop = 0;
-    const header = document.querySelector('header');
+        // Управление видимостью шапки при скролле
+        window.addEventListener('scroll', function () {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-    window.addEventListener('scroll', function () {
-        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-        if (scrollTop > lastScrollTop) {
-            // Скроллим вниз, прячем шапку
-            header.style.top = '-155px'; // Прячем шапку за верх экрана
-        } else {
-            // Скроллим вверх, показываем шапку
-            header.style.top = '0';
-        }
-
-        lastScrollTop = scrollTop;
+            header.style.top = scrollTop > lastScrollTop ? '-155px' : '0';
+            lastScrollTop = scrollTop;
+        });
     });
 </script>
-

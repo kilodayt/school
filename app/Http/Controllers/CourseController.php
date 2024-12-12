@@ -12,7 +12,7 @@ class CourseController extends Controller
     public function index()
     {
         // Извлечение всех курсов из базы данных
-        $courses = Course::all();
+        $courses = Course::all()->groupBy('language');
 
         // Возврат представления с данными всех курсов
         return view('courses.index', compact('courses'));

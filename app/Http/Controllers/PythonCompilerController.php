@@ -10,62 +10,67 @@ class PythonCompilerController extends Controller
     public function execute(Request $request)
     {
         try {
-            // Получаем код и идентификатор задания из запроса
+            // Получаем код и идентификатор задания
             $code = $request->input('code');
             $lesson_id = $request->input('lesson_id');
 
-            // Допустимые результаты для каждого задания (массив возможных ответов)
-            $expectedOutputs = [
-                1 => ['hello world', 'Hello, world!', 'HELLO WORLD', 'Hello, world', 'Hello world'],
-                2 => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
-                3 => ['Python is awesome', 'I love Python', 'Python is great'],
-                21 => [1],
-                22 => [1],
-                // Добавить все задания
-            ];
-
-            // Проверяем, что задание с таким ID существует
-            if (!isset($expectedOutputs[$lesson_id])) {
-                return response()->json(['error' => 'Неверный идентификатор задания.'], 400);
+            if (strlen($code) > 1000) {
+                return response()->json(['error' => 'Код слишком длинный. Максимум 1000 символов.'], 400);
             }
 
-            $acceptableOutputs = $expectedOutputs[$lesson_id];
+            if ($this->hasDangerousFunctions($code)) {
+                return response()->json(['error' => 'Использование опасных функций запрещено.'], 400);
+            }
 
-            // Сохраняем код во временный файл
+            // Проверяем синтаксис
             $filePath = storage_path('app/temp_code.py');
             file_put_contents($filePath, $code);
-
-            // Укажите точный путь к вашему интерпретатору Python
-            $pythonPath = base_path('Python38/python.exe'); // или base_path('python3/bin/python') для Linux/Mac
-
-            // Проверка синтаксиса перед выполнением
             $syntaxCheckResult = $this->checkSyntax($filePath);
             if ($syntaxCheckResult !== "No syntax errors.") {
                 return response()->json(['output' => $syntaxCheckResult], 400);
             }
 
-            // Запускаем процесс выполнения Python
+            // Условия для проверки кода
+            $codeChecks = [
+                1 => ['required' => ['print'], 'forbidden' => []], // Должен быть print
+                2 => ['required' => ['for', 'range'], 'forbidden' => ['while']], // Должен быть цикл for с range
+                3 => ['required' => ['def', 'return'], 'forbidden' => []], // Должна быть функция с return
+                4 => ['required' => ['and', 'or'], 'forbidden' => []],
+                // Добавить условия для других заданий
+            ];
+
+            // Проверяем, что задание с таким ID существует
+            if (!isset($codeChecks[$lesson_id])) {
+                return response()->json(['error' => 'Неверный идентификатор задания.'], 400);
+            }
+
+            // Проверяем содержимое кода
+            $checkResult = $this->checkCodeContent($code, $codeChecks[$lesson_id]);
+            if (!$checkResult['isCorrect']) {
+                return response()->json([
+                    'output' => implode("", $checkResult['errors']),
+                    'isCorrect' => false,
+                    'message' => 'Код не соответствует условиям задания. Проверьте ошибки.',
+                ], 400);
+            }
+
+            // Выполняем код
+            $pythonPath = base_path('Python38/python.exe');
             $process = new Process([$pythonPath, $filePath]);
             $process->run();
 
-            // Проверяем наличие ошибок
             if (!$process->isSuccessful()) {
-                $errorOutput = $process->getErrorOutput();
-                $filteredErrorOutput = preg_replace('/File "(.*?)"/', 'File "main.py"', $errorOutput);
-                return response()->json(['output' => $filteredErrorOutput], 400);
+                $errorOutput = preg_replace('/File "(.*?)"/', 'File "main.py"', $process->getErrorOutput());
+                return response()->json(['output' => $errorOutput], 400);
             }
 
-            // Получаем вывод от выполнения кода
             $output = trim($process->getOutput());
-
-            // Проверка, совпадает ли вывод с любым из допустимых вариантов
-            $isCorrect = in_array($output, $acceptableOutputs);
-
             return response()->json([
                 'output' => $output,
-                'isCorrect' => $isCorrect,
-                'message' => $isCorrect ? 'Задание выполнено правильно!' : 'Неправильный ответ. Попробуйте снова.',
+                'isCorrect' => true,
+                'message' => 'Задание выполнено правильно!',
             ]);
+
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -81,6 +86,65 @@ class PythonCompilerController extends Controller
         }
 
         return "No syntax errors.";
+    }
+
+    private function checkCodeContent($code, $conditions)
+    {
+        $errors = [];
+        $isCorrect = true;
+
+        // Проверка обязательных ключевых слов
+        foreach ($conditions['required'] as $keyword) {
+            if (strpos($code, $keyword) === false) {
+                $errors[] = "Ключевое слово '{$keyword}' не найдено.\n";
+                $isCorrect = false;
+            }
+        }
+
+        // Проверка запрещённых ключевых слов
+        foreach ($conditions['forbidden'] as $keyword) {
+            if (strpos($code, $keyword) !== false) {
+                $errors[] = "Ключевое слово '{$keyword}' запрещено.\n";
+                $isCorrect = false;
+            }
+        }
+
+        return ['isCorrect' => $isCorrect, 'errors' => $errors];
+    }
+
+    private function hasDangerousFunctions($code)
+    {
+        $dangerousKeywords = [
+            'os.system', 'subprocess', 'eval', 'exec', 'open', '__import__',
+            'webbrowser', 'compile', 'globals', 'locals', 'delattr', 'setattr',
+            'getattr', 'vars', 'dir', 'os.popen', 'shutil', 'sys.modules',
+            'socket', 'ctypes', 'multiprocessing', 'threading', 'pickle',
+            'marshal', 'base64', 'tempfile', 'jsonpickle',
+        ];
+        $dangerousModules = ['os', 'sys', 'subprocess', 'shutil', 'socket', 'ctypes', 'pickle', 'multiprocessing'];
+
+        foreach ($dangerousKeywords as $keyword) {
+            if (preg_match('/\b' . preg_quote($keyword, '/') . '\b/', $code)) {
+                return true;
+            }
+        }
+
+        foreach ($dangerousModules as $module) {
+            if (preg_match('/\bimport\s+' . preg_quote($module, '/') . '\b/', $code) ||
+                preg_match('/\bfrom\s+' . preg_quote($module, '/') . '\s+import\b/', $code)) {
+                return true;
+            }
+        }
+
+        if (preg_match('/[\'"]\/.*?[\'"]/', $code)) {
+            return true;
+        }
+
+        if (preg_match('/e.*v.*a.*l/', $code)) {
+            return true;
+        }
+
+        return false;
     }
 }
 

@@ -17,16 +17,21 @@
 <section class="featured-courses">
     <div class="container">
         <h2>Наши курсы</h2>
-        <div class="courses-list">
-            @foreach($courses as $course)
-                <div class="course">
-                    <img src="{{ $course->image }}" alt="{{ $course->title }}">
-                    <h3>{{ $course->title }}</h3>
-                    <p>{{ $course->description }}</p>
-                    <a href="{{ route('courses.show', ['id' => $course->id]) }}" class="btn-secondary">Узнать больше</a>
+        @foreach($courses as $language => $languageCourses)
+            <div class="language-group">
+                <h3>{{ $language }}</h3>
+                <div class="courses-list">
+                    @foreach($languageCourses as $course)
+                        <div class="course">
+                            <img src="{{ $course->image }}" alt="{{ $course->title }}">
+                            <h3>{{ $course->title }}</h3>
+                            <p>{{ $course->description }}</p>
+                            <a href="{{ route('courses.show', ['id' => $course->id]) }}" class="btn-secondary">Узнать больше</a>
+                        </div>
+                    @endforeach
                 </div>
-            @endforeach
-        </div>
+            </div>
+        @endforeach
     </div>
 </section>
 

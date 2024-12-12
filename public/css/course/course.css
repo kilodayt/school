@@ -86,3 +86,15 @@ p {
 .course-p {
     color: #ddd;
 }
+
+.language-group h3 {
+    margin-top: 20px;
+    font-size: 1.5em;
+}
+
+.courses-list {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 20px;
+}

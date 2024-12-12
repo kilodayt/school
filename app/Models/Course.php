@@ -12,10 +12,10 @@ class Course extends Model
 
     protected $fillable = [
         'id',
+        'language',
         'title',
         'description',
         'image',
-        'content',
     ];
 
     public function lessons()

@@ -108,13 +108,14 @@
 }
 
 .progress-bar {
-    margin-bottom: 20px;
+    margin-top: 50px;
+    background-color: rgba(0, 0, 51, 0.8);;
 }
 
 .progress {
     width: 100%;
     background-color: #ddd;
-    height: 20px;
+    height: 30px;
     border-radius: 10px;
     overflow: hidden;
 }

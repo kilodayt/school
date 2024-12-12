@@ -87,103 +87,79 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const links = document.querySelectorAll('.nav-links a');
-        const sections = document.querySelectorAll('.content-section');
-
-        links.forEach(link => {
-            link.addEventListener('click', function(e) {
+    document.addEventListener('DOMContentLoaded', () => {
+        // Переключение секций
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', e => {
                 e.preventDefault();
-
-                const targetId = this.getAttribute('href').substring(1);
-
-                sections.forEach(section => {
-                    if (section.id === targetId) {
-                        section.classList.add('active');
-                    } else {
-                        section.classList.remove('active');
-                    }
+                const targetId = link.getAttribute('href').substring(1);
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.toggle('active', section.id === targetId);
                 });
             });
         });
-    });
 
-    // Initialize CodeMirror editor with Python mode
-    const editor = CodeMirror.fromTextArea(document.getElementById('codeEditor'), {
-        mode: "python",
-        lineNumbers: true,
-        theme: "default"
-    });
+        // Инициализация CodeMirror
+        const editor = CodeMirror.fromTextArea(document.getElementById('codeEditor'), {
+            mode: "python",
+            lineNumbers: true,
+            theme: "default"
+        });
 
-    // Run code on button click
-    document.getElementById('runButton').addEventListener('click', function() {
-        const code = editor.getValue();
-        const lesson_id = {{ $lesson->id }};
+        // Обработчик запуска кода
+        document.getElementById('runButton').addEventListener('click', () => {
+            const code = editor.getValue();
+            const lesson_id = {{ $lesson->id }};
+            const outputElement = document.getElementById('output');
 
-
-        fetch('/run-python', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ code: code, lesson_id: lesson_id }) // Передаем lesson_id в запросе
-        })
-            .then(response => response.json())
-            .then(data => {
-                const outputElement = document.getElementById('output');
-                const lines = (data.output || data.error || '').split('\n');
-
-                // Проверяем, есть ли длинный вывод
-                if (lines.length > 20) {
-                    outputElement.textContent = lines.slice(0, 19).join('\n');
-                    const showMoreButton = document.createElement('button');
-                    showMoreButton.textContent = 'Показать больше';
-                    showMoreButton.onclick = () => {
-                        outputElement.textContent = lines.join('\n');
-                        showMoreButton.remove();
-                    };
-                    outputElement.appendChild(showMoreButton);
-                } else {
-                    outputElement.textContent = lines.join('\n');
-                }
-
-                // Отображаем сообщение о правильности выполнения задания
-                const resultMessage = document.createElement('div');
-                resultMessage.textContent = data.message || '';
-                resultMessage.style.color = data.isCorrect ? 'green' : 'red'; // Зеленый цвет для правильного ответа, красный для ошибки
-                if (data.isCorrect) {
-                    fetch('/update-progress', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({ lesson_id: lesson_id })
-                    })
-                        .then(response => response.json())
-                        .then(progressData => {
-                            if (progressData.status === 'success') {
-                                console.log('Прогресс обновлен успешно');
-                            } else if (progressData.error) {
-                                console.error('Ошибка при обновлении прогресса:', progressData.error);
-                            } else {
-                                console.error('Неизвестная ошибка при обновлении прогресса');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Ошибка при обновлении прогресса:', error);
-                        });
-                }
-                outputElement.appendChild(resultMessage);
+            fetch('/run-python', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ code, lesson_id })
             })
-            .catch(error => {
-                document.getElementById('output').textContent = 'Ошибка выполнения: ' + error.message;
-            });
+                .then(response => response.json())
+                .then(data => {
+                    const lines = (data.output || data.error || '').split('\n');
+                    outputElement.textContent = lines.slice(0, 20).join('\n');
 
+                    if (lines.length > 20) {
+                        const showMoreButton = document.createElement('button');
+                        showMoreButton.textContent = 'Показать больше';
+                        showMoreButton.onclick = () => {
+                            outputElement.textContent = lines.join('\n');
+                            showMoreButton.remove();
+                        };
+                        outputElement.appendChild(showMoreButton);
+                    }
+
+                    if (data.message) {
+                        const resultMessage = document.createElement('div');
+                        resultMessage.textContent = data.message;
+                        resultMessage.style.color = data.isCorrect ? 'green' : 'red';
+                        outputElement.appendChild(resultMessage);
+
+                        if (data.isCorrect) {
+                            fetch('/update-progress', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: JSON.stringify({ lesson_id })
+                            }).catch(console.error);
+                        }
+                    }
+                })
+                .catch(error => {
+                    outputElement.textContent = 'Ошибка выполнения: ' + error.message;
+                });
+        });
     });
-
 </script>
+
 
 </body>
 </html>

@@ -1,6 +1,19 @@
 /* Мобильные стили */
-@media (max-width: 768px) {
+
+@media screen and (max-width: 1280px) {
+    .card {
+        left: 15%;
+        max-width: 70%;
+    }
+}
+
+@media screen and (max-width: 900px) {
     .blog-container {
         margin-top: 175px;
+    }
+
+    .card {
+        left: 10%;
+        max-width: 80%;
     }
 }
