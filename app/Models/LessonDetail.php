@@ -11,6 +11,7 @@ class LessonDetail extends Model
 
     protected $table = 'Lessons_Details';
     protected $fillable = ['lesson_id', 'course_id', 'theory_1', 'theory_2', 'theory_3', 'exessize'];
+    public $timestamps = false;
 
     public function lesson()
     {

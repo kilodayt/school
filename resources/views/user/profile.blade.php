@@ -38,7 +38,7 @@
 
                 <!-- Специфичные действия для admin -->
                 @if(Auth::user()->role === 'admin')
-                    <li><a class="btn btn-success" href="{{ route('users.add') }}">Добавить пользователя / Управление
+                    <li><a class="btn btn-success" href="{{ route('admin.dashboard') }}">Добавить пользователя / Управление
                             курсами</a></li>
                 @endif
 

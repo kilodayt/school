@@ -71,6 +71,17 @@
                 </div>
             </div>
         </nav>
+        @if(session('success') || session('error'))
+            <div id="flash-message" class="alert {{ session('success') ? 'alert-success' : 'alert-danger' }} position-fixed top-0 end-0 m-3 shadow p-3 rounded">
+                {{ session('success') ?? session('error') }}
+            </div>
+
+            <script>
+                setTimeout(() => {
+                    document.getElementById('flash-message').style.display = 'none';
+                }, 3000); // Убираем через 3 секунды
+            </script>
+        @endif
 
         <main class="py-4">
             @yield('content')

@@ -35,24 +35,53 @@ class LessonController extends Controller
     }
 
     // Показать форму для создания нового урока
-    public function create()
+    public function create($course_id)
     {
-        return view('lessons.create'); // Отображаем форму для создания нового урока
+        $course = Course::findOrFail($course_id); // Получаем курс по ID
+        return view('admin.lessons.create', compact('course')); // Передаём курс в представление
     }
 
+
     // Сохранение нового урока
-    public function store(Request $request)
+    public function store(Request $request, $course_id)
     {
+        $course = Course::findOrFail($course_id);
+
+        // Проверяем, что уроков меньше 20
+        if ($course->lessons->count() >= 20) {
+            return redirect()->route('admin.courses.edit', $course_id)
+                ->with('error', 'Нельзя создать больше 20 уроков.');
+        }
+
         $request->validate([
-            'course_id' => 'required|integer',
             'lesson_id' => 'required|integer',
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'theory_1' => 'required|string',
+            'theory_2' => 'required|string',
+            'theory_3' => 'required|string',
+            'exessize' => 'required|string',
         ]);
 
-        Lesson::create($request->all()); // Сохраняем новый урок в базе данных
+        // Создаём урок
+        $lesson = Lesson::create([
+            'course_id' => $course->id,
+            'lesson_id' => $request->lesson_id,
+            'title' => $request->title,
+            'content' => $request->content,
+        ]);
 
-        return redirect()->route('lessons.index')->with('success', 'Урок создан успешно!');
+        // Создаём LessonDetails
+        LessonDetail::create([
+            'lesson_id' => $lesson->lesson_id,
+            'course_id' => $course->id,
+            'theory_1' => $request->theory_1,
+            'theory_2' => $request->theory_2,
+            'theory_3' => $request->theory_3,
+            'exessize' => $request->exessize,
+        ]);
+
+        return redirect()->route('admin.courses.edit', $course_id)->with('success', 'Урок создан успешно!');
     }
 
     // Показать конкретный урок
@@ -113,11 +142,15 @@ class LessonController extends Controller
     }
 
     // Показать форму для редактирования урока
-    public function edit($id)
+    public function edit($course_id, $lesson_id)
     {
-        $lesson = Lesson::findOrFail($id); // Извлекаем урок по ID
-        return view('lessons.edit', compact('lesson')); // Отображаем форму редактирования
+        $lesson = Lesson::where('course_id', $course_id)
+            ->where('lesson_id', $lesson_id)
+            ->firstOrFail();
+
+        return view('admin.lessons.edit', compact('lesson'));
     }
+
 
     // Обновление урока
     public function update(Request $request, $id)
@@ -132,7 +165,7 @@ class LessonController extends Controller
         $lesson = Lesson::findOrFail($id); // Извлекаем урок по ID
         $lesson->update($request->all()); // Обновляем урок
 
-        return redirect()->route('lessons.index')->with('success', 'Урок обновлен успешно!');
+        return redirect()->route('admin.lessons.index')->with('success', 'Урок обновлен успешно!');
     }
 
     // Удаление урока
@@ -141,6 +174,37 @@ class LessonController extends Controller
         $lesson = Lesson::findOrFail($id); // Извлекаем урок по ID
         $lesson->delete(); // Удаляем урок
 
-        return redirect()->route('lessons.index')->with('success', 'Урок удален успешно!');
+        return redirect()->route('admin.lessons.index')->with('success', 'Урок удален успешно!');
     }
+
+    public function editLessonDetails($course_id, $lesson_id)
+    {
+        $lesson = Lesson::where('course_id', $course_id)->where('lesson_id', $lesson_id)->firstOrFail();
+        $lessonDetails = LessonDetail::where('lesson_id', $lesson_id)->where('course_id', $course_id)->firstOrCreate([
+            'lesson_id' => $lesson_id,
+            'course_id' => $course_id
+        ]);
+
+        return view('admin.lessons.edit-details', compact('lesson', 'lessonDetails'));
+    }
+
+    public function updateLessonDetails(Request $request, $course_id, $lesson_id)
+    {
+        $request->validate([
+            'theory_1' => 'nullable|string',
+            'theory_2' => 'nullable|string',
+            'theory_3' => 'nullable|string',
+            'exessize' => 'nullable|string',
+        ]);
+
+        $lessonDetails = LessonDetail::updateOrCreate(
+            ['lesson_id' => $lesson_id, 'course_id' => $course_id],
+            $request->only(['theory_1', 'theory_2', 'theory_3', 'exessize'])
+        );
+
+        return redirect()->route('admin.lessons.edit', ['course_id' => $course_id, 'lesson_id' => $lesson_id])
+            ->with('success', 'Теоретический материал обновлён!');
+    }
+
+
 }

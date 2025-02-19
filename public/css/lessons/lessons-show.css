@@ -131,6 +131,35 @@
     font-weight: bold;
 }
 
+.theory-content {
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    white-space: pre-wrap; /* Сохраняет отступы и переносы */
+}
+
+.theory-content h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.theory-content p {
+    margin-bottom: 15px;
+    text-align: justify;
+}
+
+.theory-content code {
+    background-color: #f4f4f4;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    color: #e74c3c;
+}
+
 
 
 

@@ -21,6 +21,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\RemovePoweredBy::class,
     ];
 
     /**
@@ -70,5 +71,6 @@ class Kernel extends HttpKernel
         // Другие middleware
         'store.previous.url' => \App\Http\Middleware\StorePreviousUrl::class,
         'role' => \App\Http\Middleware\RoleMiddleware::class,
+        'admin' => \App\Http\Middleware\AdminMiddleware::class,
     ];
 }

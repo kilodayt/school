@@ -62,7 +62,7 @@
         </div>
         <div id="theory3" class="content-section">
             <h3>Теория 3</h3>
-            <p>{!! $theory3Text !!}</p>
+            <p>{!! nl2br(strip_tags($theory3Text)) !!}</p>
         </div>
         <div id="exercise" class="content-section">
             <h3>Упражнение</h3>

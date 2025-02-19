@@ -10,6 +10,7 @@ use App\Http\Controllers\PythonCompilerController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\AdminController;
 
 // Главная
 Route::get('/', function () {
@@ -54,9 +55,40 @@ Route::get('/user/{id}/courses', [UserController::class, 'showCourses'])->name('
 Route::post('/update-progress', [ProgressController::class, 'updateProgress'])->name('updateProgress');
 
 // Администрирование сайта
-Route::get('/add-user', [UserController::class, 'showForm'])->name('users.add')->middleware('role:admin');;
-Route::post('/add-user', [UserController::class, 'storeUser'])->name('users.store')->middleware('role:admin');;
-Route::post('/assign-course', [UserController::class, 'assignCourse'])->name('users.assignCourse')->middleware('role:admin');;
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    // Управление пользователями
+    Route::get('/admin/users/create', [UserController::class, 'showForm'])->name('admin.users.create');
+    Route::post('/admin/users', [UserController::class, 'storeUser'])->name('admin.users.store');
+    Route::post('/admin/users/assign-course', [UserController::class, 'assignCourse'])->name('admin.users.assignCourse');
+
+    // Админ-панель
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+
+    // Управление ролями и удаление пользователей
+    Route::post('/admin/users/{user}/update-role', [UserController::class, 'updateRole'])->name('admin.users.updateRole');
+    Route::delete('/admin/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+
+    // Управление курсами
+    Route::get('/admin/courses', [CourseController::class, 'index'])->name('admin.courses');
+    Route::get('/admin/courses/create', [CourseController::class, 'create'])->name('admin.courses.create');
+    Route::post('/admin/courses', [CourseController::class, 'store'])->name('admin.courses.store');
+    Route::get('/admin/courses/{course}/edit', [CourseController::class, 'edit'])->name('admin.courses.edit');
+    Route::post('/admin/courses/{course}', [CourseController::class, 'update'])->name('admin.courses.update');
+
+    // Управление уроками
+    Route::get('/admin/courses/{course_id}/lessons/create', [LessonController::class, 'create'])->name('admin.lessons.create');
+    Route::post('/admin/courses/{course_id}/lessons', [LessonController::class, 'store'])->name('admin.lessons.store');
+    Route::get('/admin/courses/{course_id}/lessons/{lesson_id}/edit', [LessonController::class, 'edit'])->name('admin.lessons.edit');
+    Route::post('/admin/courses/{course_id}/lessons/{lesson_id}', [LessonController::class, 'update'])->name('admin.lessons.update');
+    Route::delete('/admin/courses/{course_id}/lessons/{lesson_id}', [LessonController::class, 'destroy'])->name('admin.lessons.destroy');
+
+    // Управление теоретическим материалом уроков
+    Route::get('/admin/courses/{course_id}/lessons/{lesson_id}/details', [LessonController::class, 'editLessonDetails'])
+        ->name('admin.lessons.details.edit');
+    Route::post('/admin/courses/{course_id}/lessons/{lesson_id}/details', [LessonController::class, 'updateLessonDetails'])
+        ->name('admin.lessons.details.update');
+});
+
 
 // routes/web.php
 Route::middleware(['auth', 'role:teacher'])->group(function () {

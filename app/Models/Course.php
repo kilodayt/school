@@ -17,6 +17,7 @@ class Course extends Model
         'description',
         'image',
     ];
+    public $timestamps = false;
 
     public function lessons()
     {

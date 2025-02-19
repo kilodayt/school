@@ -58,6 +58,10 @@ nav ul li a {
     font-weight: 500;
 }
 
+.nav {
+    padding-left: 120px;
+}
+
 .nav-link {
     visibility: visible;
     display: block;
