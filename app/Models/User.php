@@ -37,6 +37,16 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class, 'user_id');
+    }
+
+    public function progressRecords()
+    {
+        return $this->hasMany(Progress::class, 'user_id');
+    }
+
     public function courses(): BelongsToMany
     {
         return $this->belongsToMany(Course::class, 'users_courses', 'user_id', 'course_id');

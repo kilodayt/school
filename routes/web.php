@@ -13,22 +13,16 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AdminController;
 
 // Главная
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::view('/', 'welcome');
 
 // Авторизация
-Auth::routes(); // Все маршруты аутентификации
+Auth::routes();
 
 // О нас
-Route::get('/about', function () {
-    return view('about');
-});
+Route::view('/about', 'about')->name('about');
 
 // Контакты
-Route::get('/contacts', function () {
-    return view('contacts');
-});
+Route::view('/contacts', 'contacts')->name('contacts');
 
 // Блог
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
@@ -43,16 +37,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/course/{course_id}/lessons', [LessonController::class, 'index'])->name('lessons.index');
     Route::get('/course/{course_id}/lessons/{id}', [LessonController::class, 'show'])->name('lessons.show');
     Route::post('/run-python', [PythonCompilerController::class, 'execute'])->name('run-python');
+
+    // ЛК пользователя
+    Route::view('/user', 'user/profile')->name('user.user');
+    Route::get('/user/{id}/courses', [UserController::class, 'showCourses'])->name('user.courses');
+
+    // Обновление прогресса
+    Route::post('/update-progress', [ProgressController::class, 'updateProgress'])->name('updateProgress');
 });
 
-// ЛК пользоватля
-Route::get('/user', function () {
-    return view('user/profile');
-})->name('user.user');
-Route::get('/user/{id}/courses', [UserController::class, 'showCourses'])->name('user.courses');
-
-// Обновление прогресса
-Route::post('/update-progress', [ProgressController::class, 'updateProgress'])->name('updateProgress');
 
 // Администрирование сайта
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -73,7 +66,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/courses/create', [CourseController::class, 'create'])->name('admin.courses.create');
     Route::post('/admin/courses', [CourseController::class, 'store'])->name('admin.courses.store');
     Route::get('/admin/courses/{course}/edit', [CourseController::class, 'edit'])->name('admin.courses.edit');
-    Route::post('/admin/courses/{course}', [CourseController::class, 'update'])->name('admin.courses.update');
+    Route::put('/admin/courses/{course}', [CourseController::class, 'update'])->name('admin.courses.update');
+
+    Route::delete('/admin/courses/{course}', [CourseController::class, 'destroy'])->name('admin.courses.destroy');
 
     // Управление уроками
     Route::get('/admin/courses/{course_id}/lessons/create', [LessonController::class, 'create'])->name('admin.lessons.create');
@@ -90,11 +85,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 
-// routes/web.php
+// Управление расписанием
 Route::middleware(['auth', 'role:teacher'])->group(function () {
     Route::get('/schedule', [ScheduleController::class, 'index'])->name('teacher.schedule');
     Route::get('/schedule/create', [ScheduleController::class, 'create'])->name('schedule.create');
     Route::post('/schedule', [ScheduleController::class, 'store'])->name('schedule.store');
     Route::delete('/schedule/{schedule}', [ScheduleController::class, 'destroy'])->name('schedule.destroy');
 });
-

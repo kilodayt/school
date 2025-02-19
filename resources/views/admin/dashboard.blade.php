@@ -5,7 +5,9 @@
         <h1>Админ-панель</h1>
 
         <h3>Курсы</h3>
-        <a href="{{ route('admin.courses.create') }}" class="btn btn-primary mb-3">Добавить курс</a>
+        <div class="mb-3">
+            <a href="{{ route('admin.courses.create') }}" class="btn btn-primary mb-3">Добавить курс</a>
+        </div>
         <ul class="list-group">
             @foreach($courses as $course)
                 <li class="list-group-item d-flex justify-content-between align-items-center">

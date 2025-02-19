@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Lesson extends Model
 {
@@ -25,11 +26,12 @@ class Lesson extends Model
 
     public function progress()
     {
-        return $this->hasMany(Progress::class);
+        return $this->hasMany(Progress::class, 'lesson_id');
     }
 
     public function details()
     {
-        return $this->hasOne(LessonDetail::class, 'lesson_id');
+        return $this->hasMany(LessonDetail::class, 'lesson_id');
     }
+
 }

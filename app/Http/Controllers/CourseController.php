@@ -4,29 +4,32 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Course;
-use App\Models\UserCourse;
 use Illuminate\Support\Facades\Auth;
+use App\Services\CourseService;
 
 class CourseController extends Controller
 {
+    protected $courseService;
+
+    public function __construct(CourseService $courseService)
+    {
+        $this->courseService = $courseService;
+    }
+
     public function index()
     {
-        // Группируем курсы по языку
-        $courses = Course::all()->groupBy('language');
+        $courses = $this->courseService->getAllCourses();
         return view('courses.index', compact('courses'));
     }
 
     public function show($id)
     {
         // Загружаем курс с его уроками
-        $course = Course::with('lessons')->findOrFail($id);
+        $course = $this->courseService->getCourseById($id);
         $hasCourse = false;
 
         if (Auth::check()) {
-            $userId = Auth::id();
-            $hasCourse = UserCourse::where('user_id', $userId)
-                ->where('course_id', $id)
-                ->exists();
+            $hasCourse = $this->courseService->hasCourse($id);
         }
 
         return view('courses.show', compact('course', 'hasCourse'));
@@ -41,26 +44,16 @@ class CourseController extends Controller
     /** 🔹 Метод для сохранения нового курса */
     public function store(Request $request)
     {
-        $request->validate([
+        // Валидация входных данных
+        $data = $request->validate([
             'language' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Сохранение изображения, если загружено
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('courses', 'public');
-        }
-
-        // Создание курса
-        Course::create([
-            'language' => $request->language,
-            'title' => $request->title,
-            'description' => $request->description,
-            'image' => $imagePath,
-        ]);
+        // Создание курса через сервис
+        $this->courseService->createCourse($data);
 
         return redirect()->route('admin.courses')->with('success', 'Курс создан!');
     }
@@ -75,20 +68,20 @@ class CourseController extends Controller
     /** 🔹 Метод для обновления курса */
     public function update(Request $request, Course $course)
     {
-        $request->validate([
+        $data = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
 
-        $course->update($request->only('title', 'description'));
+        $this->courseService->updateCourse($course, $data);
 
         return redirect()->route('admin.courses')->with('success', 'Курс обновлён!');
     }
 
     /** 🔹 Метод для удаления курса */
-    public function destroy(Course $course)
+    public function destroy($id)
     {
-        $course->delete();
+        $this->courseService->deleteCourse($id);
 
         return redirect()->route('admin.courses')->with('success', 'Курс удалён!');
     }

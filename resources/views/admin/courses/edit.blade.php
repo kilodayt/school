@@ -6,6 +6,7 @@
 
         <form method="POST" action="{{ route('admin.courses.update', $course) }}">
             @csrf
+            @method('PUT')
             <div class="mb-3">
                 <label class="form-label">Название курса</label>
                 <input type="text" name="title" value="{{ old('title', $course->title) }}" class="form-control" required>
@@ -15,6 +16,13 @@
                 <textarea name="description" class="form-control">{{ old('description', $course->description) }}</textarea>
             </div>
             <button type="submit" class="btn btn-success">Сохранить</button>
+        </form>
+
+        <!-- Форма удаления курса -->
+        <form method="POST" action="{{ route('admin.courses.destroy', $course) }}" onsubmit="return confirm('Вы уверены, что хотите удалить этот курс?');">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger mt-2">Удалить курс</button>
         </form>
 
         <h3 class="mt-4">Уроки</h3>
