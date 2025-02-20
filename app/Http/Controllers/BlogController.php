@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Post;
+use Illuminate\View\View;
 
 class BlogController extends Controller
 {
-    public function index()
+    /** Главная страница блога */
+    public function index(): View
     {
         // Получаем список всех постов
         $posts = Post::latest()->paginate(10);
@@ -16,7 +16,8 @@ class BlogController extends Controller
         return view('blog.index', compact('posts'));
     }
 
-    public function show($slug)
+    /** Страница статьи */
+    public function show($slug): View
     {
         $post = Post::where('slug', $slug)->firstOrFail();
 

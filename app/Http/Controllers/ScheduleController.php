@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Schedule;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\Course;
 
 class ScheduleController extends Controller
 {
-    public function index()
+    /** Главная страница расписания */
+    public function index(): View
     {
         // Получаем расписание текущего учителя
         $schedules = Schedule::where('teacher_id', auth()->id())->orderBy('date')->orderBy('start_time')->get();
@@ -16,13 +19,15 @@ class ScheduleController extends Controller
         return view('teacher.schedule', compact('schedules'));
     }
 
-    public function create()
+    /** Показать форму для создания расписания */
+    public function create(): View
     {
         $courses = Course::all(); // Получаем все курсы
         return view('teacher.schedule-create', compact('courses')); // Передаём переменную courses
     }
 
-    public function store(Request $request)
+    /** Сохранение нового расписания */
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'date' => 'required|date',
@@ -44,7 +49,8 @@ class ScheduleController extends Controller
         return redirect()->route('teacher.schedule')->with('success', 'Занятие добавлено!');
     }
 
-    public function destroy(Schedule $schedule)
+    /** Удаление расписания */
+    public function destroy(Schedule $schedule): RedirectResponse
     {
         // Удаляем только если это расписание текущего учителя
         if ($schedule->teacher_id !== auth()->id()) {

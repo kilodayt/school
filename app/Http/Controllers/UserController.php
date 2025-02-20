@@ -3,22 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Encore\Admin\Form\Field\Nullable;
+use http\Env\Response;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    /**
-     * Показать курсы пользователя.
-     *
-     * @param int $id
-     * @return \Illuminate\View\View
-     */
-    public function showCourses($id)
+    /** Показать курсы пользователя */
+    public function showCourses($id): View
     {
         // Находим пользователя по его ID
         $user = User::findOrFail($id);
@@ -30,17 +29,17 @@ class UserController extends Controller
         return view('user.courses', ['user' => $user, 'courses' => $courses]);
     }
 
-
-    public function showForm()
+    /** Вывод формы */
+    public function showForm(): View
     {
         // Выводим форму
         $users = User::all();
-        $courses = DB::table('courses')->get(); // Предполагается, что есть таблица `courses`
+        $courses = DB::table('courses')->get();
         return view('users.add', compact('users', 'courses'));
     }
 
-
-    public function storeUser(Request $request)
+    /** Сохранение пользователя */
+    public function storeUser(Request $request): RedirectResponse|JsonResponse
     {
         try {
             $request->validate([
@@ -66,8 +65,8 @@ class UserController extends Controller
         }
     }
 
-
-    public function assignCourse(Request $request)
+    /** Назначение курса пользователю */
+    public function assignCourse(Request $request): RedirectResponse
     {
         try {
             $request->validate([
@@ -97,8 +96,8 @@ class UserController extends Controller
         }
     }
 
-
-    public function updateRole(Request $request, User $user)
+    /** Изменение роли пользователя */
+    public function updateRole(Request $request, User $user): RedirectResponse
     {
         $request->validate([
             'role' => 'required|in:user,teacher,admin'
@@ -114,8 +113,8 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Роль пользователя изменена.');
     }
 
-
-    public function destroy(User $user)
+    /** Удаление пользователя */
+    public function destroy(User $user): RedirectResponse
     {
         if (Auth::id() === $user->id) {
             return redirect()->back()->with('error', 'Вы не можете удалить себя.');

@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lesson;
-use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\User;
+use Illuminate\View\View;
 
 class AdminController extends Controller
 {
-    public function index()
+    /** Главная страница администрирования */
+    public function index(): View
     {
+        // Получение всех курсов, пользователей и уроков
         $courses = Course::all();
         $users = User::all();
         $lessons = Lesson::all();

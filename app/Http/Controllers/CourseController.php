@@ -2,29 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\Course;
 use Illuminate\Support\Facades\Auth;
 use App\Services\CourseService;
+use Illuminate\View\View;
 
 class CourseController extends Controller
 {
     protected $courseService;
 
+    /** Инициализация сервиса через конструктор */
     public function __construct(CourseService $courseService)
     {
         $this->courseService = $courseService;
     }
 
-    public function index()
+    /** Главная страница курсов */
+    public function index(): View
     {
         $courses = $this->courseService->getAllCourses();
         return view('courses.index', compact('courses'));
     }
 
-    public function show($id)
+    /** Страница выбранного курса */
+    public function show($id): View
     {
-        // Загружаем курс с его уроками
+        // Загружаем курс с его уроками и проверяем наличие у пользователя курсов
         $course = $this->courseService->getCourseById($id);
         $hasCourse = false;
 
@@ -35,14 +40,14 @@ class CourseController extends Controller
         return view('courses.show', compact('course', 'hasCourse'));
     }
 
-    /** 🔹 Метод для создания курса */
-    public function create()
+    /** Показать форму для создания нового курса */
+    public function create(): View
     {
         return view('admin.courses.create');
     }
 
-    /** 🔹 Метод для сохранения нового курса */
-    public function store(Request $request)
+    /** Сохранение нового курса */
+    public function store(Request $request): RedirectResponse
     {
         // Валидация входных данных
         $data = $request->validate([
@@ -59,14 +64,14 @@ class CourseController extends Controller
     }
 
 
-    /** 🔹 Метод для редактирования курса */
-    public function edit(Course $course)
+    /** Редактирование курса */
+    public function edit(Course $course): View
     {
         return view('admin.courses.edit', compact('course'));
     }
 
-    /** 🔹 Метод для обновления курса */
-    public function update(Request $request, Course $course)
+    /** Обновление данных курса */
+    public function update(Request $request, Course $course): RedirectResponse
     {
         $data = $request->validate([
             'title' => 'required|string|max:255',
@@ -78,8 +83,8 @@ class CourseController extends Controller
         return redirect()->route('admin.courses')->with('success', 'Курс обновлён!');
     }
 
-    /** 🔹 Метод для удаления курса */
-    public function destroy($id)
+    /** Удаление курса */
+    public function destroy($id): RedirectResponse
     {
         $this->courseService->deleteCourse($id);
 

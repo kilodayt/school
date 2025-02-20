@@ -87,6 +87,33 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
 <script>
+    // Сохранение значения с указанием времени жизни (ttl) в миллисекундах
+    function setWithExpiry(key, value, ttl) {
+        const now = Date.now();
+        const item = {
+            value: value,
+            expiry: now + ttl,
+        };
+        localStorage.setItem(key, JSON.stringify(item));
+    }
+
+    // Получение значения из localStorage, если не просрочено
+    function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key);
+        if (!itemStr) {
+            return null;
+        }
+        const item = JSON.parse(itemStr);
+        const now = Date.now();
+
+        // Если данные устарели, удаляем ключ и возвращаем null
+        if (now > item.expiry) {
+            localStorage.removeItem(key);
+            return null;
+        }
+        return item.value;
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         // Переключение секций
         document.querySelectorAll('.nav-links a').forEach(link => {
@@ -106,10 +133,38 @@
             theme: "default"
         });
 
+        // Вставьте сюда реальный userId и lessonId
+        const userId = {{ auth()->id() }};
+        const lessonId = {{ $lesson->id }};
+
+        // Ключ для локального хранилища
+        const localStorageKey = `codeEditorLesson_${lessonId}_user_${userId}`;
+
+        // Проверяем, есть ли сохранённый код (не просроченный)
+        const savedCode = getWithExpiry(localStorageKey);
+        if (savedCode) {
+            editor.setValue(savedCode);
+        }
+
+        // Сохраняем код в localStorage на 10 минут (600000 мс)
+        // каждую 1 секунду после последнего изменения
+        const SAVE_INTERVAL = 1000; // 1 секунда
+        let saveTimeoutId = null;
+
+        editor.on('change', () => {
+            if (saveTimeoutId) {
+                clearTimeout(saveTimeoutId);
+            }
+            saveTimeoutId = setTimeout(() => {
+                const currentCode = editor.getValue();
+                // 10 минут = 10 * 60 * 1000 = 600000 мс
+                setWithExpiry(localStorageKey, currentCode, 10 * 60 * 1000);
+            }, SAVE_INTERVAL);
+        });
+
         // Обработчик запуска кода
         document.getElementById('runButton').addEventListener('click', () => {
             const code = editor.getValue();
-            const lesson_id = {{ $lesson->id }};
             const outputElement = document.getElementById('output');
 
             fetch('/run-python', {
@@ -118,7 +173,7 @@
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
-                body: JSON.stringify({ code, lesson_id })
+                body: JSON.stringify({ code, lesson_id: lessonId })
             })
                 .then(response => response.json())
                 .then(data => {
@@ -148,7 +203,7 @@
                                     'Content-Type': 'application/json',
                                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                                 },
-                                body: JSON.stringify({ lesson_id })
+                                body: JSON.stringify({ lesson_id: lessonId })
                             }).catch(console.error);
                         }
                     }
@@ -159,7 +214,5 @@
         });
     });
 </script>
-
-
 </body>
 </html>

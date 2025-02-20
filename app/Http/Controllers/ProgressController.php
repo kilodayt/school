@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Progress;
 
 class ProgressController extends Controller
 {
-    public function updateProgress(Request $request)
+    /** Обновление прогресса пользователя */
+    public function updateProgress(Request $request): JsonResponse
     {
         try {
             // Получаем текущего пользователя
@@ -32,7 +35,7 @@ class ProgressController extends Controller
             }
 
             return response()->json(['status' => 'success']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Ловим исключение и возвращаем ошибку
             return response()->json(['error' => $e->getMessage()], 500);
         }
