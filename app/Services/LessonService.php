@@ -23,12 +23,13 @@ class LessonService
     public function getLessonsWithCompletion(int $courseId, int $userId): array
     {
         // Загружаем курс с уроками
-        $course = Course::with('lessons')->findOrFail($courseId);
+        $course  = Course::with('lessons')->findOrFail($courseId);
         $lessons = $course->lessons;
 
-        // Вычисляем выполненные уроки
+        // Вычисляем выполненные уроки по полям course_id + lesson_id
         $completedLessons = Progress::where('user_id', $userId)
-            ->whereIn('lesson_id', $lessons->pluck('id'))
+            ->where('course_id', $courseId)
+            ->whereIn('lesson_id', $lessons->pluck('lesson_id'))
             ->pluck('lesson_id')
             ->toArray();
 
@@ -40,6 +41,7 @@ class LessonService
             'completedLessonsCount' => count($completedLessons),
         ];
     }
+
 
     /**
      * Создать новый урок и LessonDetail в рамках курса.
@@ -146,9 +148,11 @@ class LessonService
 
         $lessons = $cachedData['lessons'];
         $completedLessons = Progress::where('user_id', $userId)
-            ->whereIn('lesson_id', $lessons->pluck('id'))
+            ->where('course_id', $courseId)
+            ->whereIn('lesson_id', $lessons->pluck('lesson_id'))
             ->pluck('lesson_id')
             ->toArray();
+
 
         return [
             'course'                => $cachedData['course'],

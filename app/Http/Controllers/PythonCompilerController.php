@@ -8,17 +8,16 @@ use Illuminate\Http\JsonResponse;
 
 class PythonCompilerController extends Controller
 {
-    public function execute(ExecutePythonRequest $request, PythonRunnerService $runner): JsonResponse
+    public function execute(ExecutePythonRequest $r, PythonRunnerService $runner): JsonResponse
     {
-        try {
-            $code = $request->input('code');
-            $lessonId = (int) $request->input('lesson_id');
+        $data = $r->validate([
+            'code'      => 'required|string',
+            'course_id' => 'required|integer',
+            'lesson_id' => 'required|integer',
+            'language'  => 'required|string|in:python,cpp,php',
+        ]);
 
-            // Запуск кода через сервис
-            return $runner->runCode($code, $lessonId);
-
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        return $runner
+            ->runCode($data['code'], $data['language'], $data['course_id'], $data['lesson_id']);
     }
 }

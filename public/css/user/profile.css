@@ -9,7 +9,8 @@
 
 .mt-5, .my-5 {
     margin-top: 5rem !important;
-    margin-bottom: 5rem !important;;
+    margin-bottom: 5rem !important;
+    display: block;
 }
 
 .profile-title {

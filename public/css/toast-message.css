@@ -1,21 +1,35 @@
 .toast-message {
-    visibility: hidden; /* Скрываем изначально */
+    /* Изначально скрыто и не реагирует на события */
+    visibility: hidden;
+    pointer-events: none;
+
+    /* Размер и базовая стилизация */
     min-width: 250px;
-    background-color: #333;
+    max-width: 90%;
+    padding: 16px 24px;
+    background: rgba(51, 51, 51, 0.9);
     color: #fff;
     text-align: center;
     border-radius: 4px;
-    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+    /* Позиционирование по центру сверху */
     position: fixed;
-    top: 30px;
-    left: 50%; /* Центрируем по горизонтали */
-    transform: translateX(-50%); /* Смещаем на половину ширины элемента */
+    top: 1rem;
+    left: 50%;
+    transform: translate(-50%, -10px);
+
+    /* Плавная анимация появления */
     opacity: 0;
-    transition: visibility 0s, opacity 0.5s ease-in-out;
-    z-index: 9999; /* Поверх всех остальных элементов */
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0.3s;
+    z-index: 9999;
 }
 
 .toast-message.show {
+    /* Делаем видимым и возвращаем в исходное положение */
     visibility: visible;
-    opacity: 2;
+    opacity: 1;
+    transform: translate(-50%, 0);
+    pointer-events: auto;
 }
+

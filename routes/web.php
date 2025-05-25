@@ -12,8 +12,13 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AdminController;
 
+use App\Models\Course;
+
 // Главная
-Route::view('/', 'welcome');
+Route::get('/', function () {
+    $courses = Course::orderBy('id')->take(2)->get();
+    return view('/welcome', compact('courses'));
+});
 
 // Авторизация
 Auth::routes();
@@ -80,7 +85,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Управление теоретическим материалом уроков
     Route::get('/admin/courses/{course_id}/lessons/{lesson_id}/details', [LessonController::class, 'editLessonDetails'])
         ->name('admin.lessons.details.edit');
-    Route::post('/admin/courses/{course_id}/lessons/{lesson_id}/details', [LessonController::class, 'updateLessonDetails'])
+    Route::put('/admin/courses/{course_id}/lessons/{lesson_id}/details', [LessonController::class, 'updateLessonDetails'])
         ->name('admin.lessons.details.update');
 });
 

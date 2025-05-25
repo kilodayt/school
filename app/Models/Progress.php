@@ -12,7 +12,7 @@ class Progress extends Model
     protected $table = 'progress';
 
     // Поля, которые можно заполнять массово
-    protected $fillable = ['user_id', 'lesson_id', 'status'];
+    protected $fillable = ['user_id','course_id', 'lesson_id', 'status'];
 
     // Отношение к пользователю
     public function user()
@@ -24,5 +24,10 @@ class Progress extends Model
     public function lesson()
     {
         return $this->belongsTo(Lesson::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
     }
 }

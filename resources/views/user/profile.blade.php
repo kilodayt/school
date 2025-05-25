@@ -5,6 +5,7 @@
     @include('includes.head')
     <title>Профиль</title>
     <link rel="stylesheet" href="{{ asset('css/user/profile.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/user/profile-mobile.css') }}">
 </head>
 
 <body>

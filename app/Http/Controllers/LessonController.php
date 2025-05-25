@@ -8,6 +8,8 @@ use App\Services\LessonService;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Course;
 use Illuminate\View\View;
+use App\Models\LessonCheck;
+
 
 class LessonController extends Controller
 {
@@ -116,30 +118,60 @@ class LessonController extends Controller
     /** Показать форму для редактирования деталей урока */
     public function editLessonDetails($course_id, $lesson_id): View
     {
+        // детали урока
         $lessonDetails = $this->lessonService->getLessonDetails($course_id, $lesson_id);
 
-        // Можно дополнительно получить сам урок или другую информацию
+        // сам урок (для хлебных крошек, заголовка и т.п.)
         $lesson = $this->lessonService
-            ->showLesson($course_id, $lesson_id, Auth::id())['lesson'] ?? null;
+            ->showLesson($course_id, $lesson_id, Auth::id())['lesson'];
 
-        return view('admin.lessons.edit-details', compact('lesson', 'lessonDetails'));
+        // проверки из lesson_checks
+        $lessonCheck = LessonCheck::firstOrNew([
+            'course_id' => $course_id,
+            'lesson_id' => $lesson_id,
+        ]);
+
+        return view('admin.lessons.edit-details', compact(
+            'lesson', 'lessonDetails', 'lessonCheck'
+        ));
     }
 
     /** Обновление данных деталей урока */
     public function updateLessonDetails(Request $request, $course_id, $lesson_id): RedirectResponse
     {
+        // валидация для теории
         $request->validate([
-            'theory_1' => 'nullable|string',
-            'theory_2' => 'nullable|string',
-            'theory_3' => 'nullable|string',
-            'exessize' => 'nullable|string',
+            'theory_1'  => 'nullable|string',
+            'theory_2'  => 'nullable|string',
+            'theory_3'  => 'nullable|string',
+            'exessize'  => 'nullable|string',
+            // новые поля для проверок
+            'required'  => 'nullable|string',
+            'forbidden' => 'nullable|string',
         ]);
 
+        // сначала обновляем теорию
         $this->lessonService->updateLessonDetails($course_id, $lesson_id, $request->all());
 
+        // теперь парсим и сохраняем проверки
+        $required  = array_filter(
+            array_map('trim', explode(',', $request->input('required', '')))
+        );
+        $forbidden = array_filter(
+            array_map('trim', explode(',', $request->input('forbidden', '')))
+        );
+
+        LessonCheck::updateOrCreate(
+            ['course_id' => $course_id, 'lesson_id' => $lesson_id],
+            ['required' => $required, 'forbidden' => $forbidden]
+        );
+
         return redirect()
-            ->route('admin.lessons.edit', ['course_id' => $course_id, 'lesson_id' => $lesson_id])
-            ->with('success', 'Теоретический материал обновлён!');
+            ->route('admin.lessons.details.edit', [
+                'course_id' => $course_id,
+                'lesson_id' => $lesson_id
+            ])
+            ->with('success', 'Данные урока и проверки сохранены!');
     }
 
     /** Удаление урока */

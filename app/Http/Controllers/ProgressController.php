@@ -8,36 +8,42 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Progress;
 
+
 class ProgressController extends Controller
 {
     /** Обновление прогресса пользователя */
     public function updateProgress(Request $request): JsonResponse
     {
         try {
-            // Получаем текущего пользователя
-            $userId = Auth::id();
+            // Валидация входных данных
+            $data = $request->validate([
+                'course_id' => 'required|integer|exists:courses,id',
+                'lesson_id' => 'required|integer',
+                'status'    => 'sometimes|string|in:pending,in_progress,completed',
+            ]);
 
-            // Получаем lesson_id из запроса
-            $lessonId = $request->input('lesson_id');
+            $userId   = Auth::id();
+            $courseId = $data['course_id'];
+            $lessonId = $data['lesson_id'];
+            $status   = $data['status'] ?? 'completed';
 
-            // Проверяем, существует ли запись для текущего урока
-            $progress = Progress::where('user_id', $userId)
-                ->where('lesson_id', $lessonId)
-                ->first();
+            // Ищем или создаём запись прогресса по составному ключу
+            $progress = Progress::firstOrNew([
+                'course_id' => $courseId,
+                'user_id'   => $userId,
+                'lesson_id' => $lessonId,
+            ]);
 
-            // Если записи нет, создаем новую
-            if (!$progress) {
-                Progress::create([
-                    'user_id' => $userId,
-                    'lesson_id' => $lessonId,
-                    'status' => 'completed',
-                ]);
-            }
+            // Обновляем статус и сохраняем (поставит updated_at автоматически)
+            $progress->status = $status;
+            $progress->save();
 
             return response()->json(['status' => 'success']);
         } catch (Exception $e) {
-            // Ловим исключение и возвращаем ошибку
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json([
+                'error'   => 'Не удалось обновить прогресс.',
+                'message' => $e->getMessage(),
+            ], 500);
         }
     }
 }

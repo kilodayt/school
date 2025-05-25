@@ -79,7 +79,7 @@ class CourseService
     {
         // Находим курс, вместе с уроками и деталями уроков
         $course = Course::with('lessons.details')->findOrFail($courseId);
-
+        $course->users()->detach();
         // Удаляем связанные детали уроков
         LessonDetail::where('course_id', $courseId)->delete();
 

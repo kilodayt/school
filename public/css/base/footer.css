@@ -1,0 +1,32 @@
+/* Footer */
+.contacts {
+    padding: 90px 0;
+    text-align: center;
+    background-color: rgba(0, 0, 51, 0.8);;
+}
+
+.contacts-title {
+    margin-bottom: 40px;
+}
+
+.contacts-content {
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+.contacts-button {
+    margin-bottom: 80px;
+}
+
+
+.contact-social {
+    display: flex;
+    justify-content: center;
+    column-gap: 60px;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.contacts-footer {
+    color: #ffffff;
+}

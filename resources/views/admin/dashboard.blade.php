@@ -4,7 +4,30 @@
     <div class="container">
         <h1>Админ-панель</h1>
 
-        <h3>Курсы</h3>
+        <div class="row mb-5">
+        <div class="col-md-6">
+            <h4>Распределение ролей пользователей</h4>
+            <canvas id="rolesChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <h4>Активность по курсам</h4>
+            <canvas id="coursesChart"></canvas>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <h4>Завершённость уроков</h4>
+            <canvas id="completionChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <h4>Новые пользователи (последние 7 дней)</h4>
+            <canvas id="newUsersChart"></canvas>
+        </div>
+    </div>
+
+
+    <h3>Курсы</h3>
         <div class="mb-3">
             <a href="{{ route('admin.courses.create') }}" class="btn btn-primary mb-3">Добавить курс</a>
         </div>
@@ -114,7 +137,55 @@
         </form>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Данные из контроллера
+            const rolesData = @json($rolesStats);
+            const coursesData = @json($coursesStats);
+            const completionData = @json($completionData);
+            const newUsersData = @json($newUsersData);
+
+            // График распределения ролей
+            new Chart(document.getElementById('rolesChart'), {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(rolesData),
+                    datasets: [{ data: Object.values(rolesData) }]
+                }
+            });
+
+            // Активность по курсам
+            new Chart(document.getElementById('coursesChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(coursesData),
+                    datasets: [{ label: 'Участников', data: Object.values(coursesData) }]
+                },
+                options: { scales: { y: { beginAtZero: true } } }
+            });
+
+            // Завершённость уроков
+            new Chart(document.getElementById('completionChart'), {
+                type: 'line',
+                data: {
+                    labels: completionData.labels,
+                    datasets: [{ label: 'Завершён уроков', data: completionData.values }]
+                },
+                options: { scales: { y: { beginAtZero: true } } }
+            });
+
+            // Новые пользователи за неделю
+            new Chart(document.getElementById('newUsersChart'), {
+                type: 'line',
+                data: {
+                    labels: newUsersData.labels,
+                    datasets: [{ label: 'Новые пользователи', data: newUsersData.values }]
+                },
+                options: { scales: { y: { beginAtZero: true } } }
+            });
+        });
+
         // Получаем элементы
         const form = document.getElementById('addUserForm');
         const popup = document.getElementById('popup');

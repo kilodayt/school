@@ -85,7 +85,7 @@
         // Управление отображением меню
         menuToggle.addEventListener('click', function () {
             this.classList.toggle('active');
-            nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
+            nav.style.display = nav.style.display === 'inline' ? 'none' : 'inline';
         });
 
         // Сброс стилей навигации при изменении размера окна
@@ -95,7 +95,7 @@
                 menuToggle.style.display = 'none';
             } else {
                 nav.style.display = 'none';
-                menuToggle.style.display = 'block';
+                menuToggle.style.display = 'inline';
             }
         });
 

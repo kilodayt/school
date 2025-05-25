@@ -33,9 +33,11 @@
     <div class="lessons-list">
         <h3>Уроки</h3>
         @foreach($lessons as $lessonItem)
-            <div class="lesson-item {{ in_array($lessonItem->id, $completedLessons) ? 'completed' : '' }}">
-                <a href="{{ route('lessons.show', ['course_id' => $course->id, 'id' => $lessonItem->lesson_id]) }}">
-                    {{ request()->is('lessons/'.$lessonItem->lesson_id) ? 'active' : '' }}
+            <div class="lesson-item {{ in_array($lessonItem->lesson_id, $completedLessons) ? 'completed' : '' }}">
+                <a
+                    href="{{ route('lessons.show', ['course_id' => $course->id, 'id' => $lessonItem->lesson_id]) }}"
+                    class="{{ request()->route('id') == $lessonItem->lesson_id ? 'active' : '' }}"
+                >
                     {{ $lessonItem->title }}
                 </a>
             </div>
@@ -68,22 +70,29 @@
             <h3>Упражнение</h3>
             <p>{!! $exessizeText !!}</p>
             <h1>Python Компилятор</h1>
-                <!-- CodeMirror Editor -->
-            <div class="editor-container">
+
+            <!-- CodeMirror Editor -->
+            <div class="editor-container" style="margin-top: 10px;">
                 <textarea id="codeEditor" rows="10" cols="60" placeholder="Введите ваш Python код..."></textarea>
             </div>
 
             <br>
-            <button id="runButton" data-lesson-id="{{ $lesson->id }}">Запустить код</button>
-
+            <button id="runButton"
+                    data-lesson-id="{{ $lesson->lesson_id }}"
+                    data-course-id="{{ $course->id }}"
+                    data-language="{{ $course->language }}">Запустить код</button>
+            our
             <!-- Вывод результата -->
             <h3>Результат:</h3>
             <pre id="output" style="background: #f8f8f8; border: 1px solid #ddd; padding: 20px; position: relative;"></pre>
         </div>
+
     </div>
 </div>
 @include('includes.footer')
 
+<script src=".../mode/clike/clike.min.js"></script>
+<script src=".../mode/php/php.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
 <script>
@@ -127,13 +136,18 @@
         });
 
         // Инициализация CodeMirror
-        const editor = CodeMirror.fromTextArea(document.getElementById('codeEditor'), {
-            mode: "python",
-            lineNumbers: true,
-            theme: "default"
-        });
+        const lang = runButton.dataset.language;     // 'python' | 'cpp' | 'php'
+        let mode;
+        switch (lang) {
+            case 'cpp':  mode = 'text/x-c++src'; break;
+            case 'php':  mode = 'application/x-httpd-php'; break;
+            default:     mode = 'python';
+        }
+        const editor = CodeMirror.fromTextArea(
+            document.getElementById('codeEditor'),
+            { mode, lineNumbers: true, theme: "default" }
+        );
 
-        // Вставьте сюда реальный userId и lessonId
         const userId = {{ auth()->id() }};
         const lessonId = {{ $lesson->id }};
 
@@ -166,21 +180,49 @@
         document.getElementById('runButton').addEventListener('click', () => {
             const code = editor.getValue();
             const outputElement = document.getElementById('output');
+            const courseId = +runButton.dataset.courseId;
+            const lessonId = +runButton.dataset.lessonId;
+
+            console.log('Отправляем на сервер:', {
+                codeSample: code.slice(0,50) + (code.length>50?'…':''),
+                lesson_id:  lessonId,
+                course_id:  courseId,
+                language:   lang
+            });
 
             fetch('/run-python', {
                 method: 'POST',
+                credentials: 'same-origin',
                 headers: {
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
-                body: JSON.stringify({ code, lesson_id: lessonId })
+                body: JSON.stringify({ code, lesson_id: lessonId, course_id: courseId, language: lang })
             })
-                .then(response => response.json())
+                .then(async res => {
+                    const ct = res.headers.get('Content-Type') || '';
+                    let data;
+                    if (ct.includes('application/json')) {
+                        data = await res.json();
+                    } else {
+                        // не-JSON, вытащим текст
+                        const text = await res.text();
+                        throw new Error(text);
+                    }
+                    if (! res.ok) {
+                        // dump the raw text so you can see the HTML error page
+                        const msg = data.error || data.output || JSON.stringify(data);
+                        throw new Error(msg);
+                    }
+                    return data;
+                })
                 .then(data => {
                     const lines = (data.output || data.error || '').split('\n');
                     outputElement.textContent = lines.slice(0, 20).join('\n');
 
                     if (lines.length > 20) {
+                        const outputElement = document.getElementById('output');
                         const showMoreButton = document.createElement('button');
                         showMoreButton.textContent = 'Показать больше';
                         showMoreButton.onclick = () => {
@@ -203,13 +245,13 @@
                                     'Content-Type': 'application/json',
                                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                                 },
-                                body: JSON.stringify({ lesson_id: lessonId })
+                                body: JSON.stringify({ course_id: courseId, lesson_id: lessonId })
                             }).catch(console.error);
                         }
                     }
                 })
                 .catch(error => {
-                    outputElement.textContent = 'Ошибка выполнения: ' + error.message;
+                    document.getElementById('output').textContent = 'Ошибка: ' + error.message;
                 });
         });
     });
