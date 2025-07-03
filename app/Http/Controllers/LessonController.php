@@ -121,7 +121,7 @@ class LessonController extends Controller
         // детали урока
         $lessonDetails = $this->lessonService->getLessonDetails($course_id, $lesson_id);
 
-        // сам урок (для хлебных крошек, заголовка и т.п.)
+        // сам урок
         $lesson = $this->lessonService
             ->showLesson($course_id, $lesson_id, Auth::id())['lesson'];
 
@@ -145,7 +145,6 @@ class LessonController extends Controller
             'theory_2'  => 'nullable|string',
             'theory_3'  => 'nullable|string',
             'exessize'  => 'nullable|string',
-            // новые поля для проверок
             'required'  => 'nullable|string',
             'forbidden' => 'nullable|string',
         ]);

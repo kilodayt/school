@@ -95,7 +95,6 @@ class CourseService
         $course->delete();
     }
 
-
     /**
      * Сохранение изображения
      *
